@@ -11,457 +11,420 @@
   }
   body, html {
     margin: 0; padding: 0;
-    height: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #003366; /* universal blue */
-    color: #ffd700; /* golden yellow */
+    background: #f8d7e3; /* light pink background */
+    color: #d6006c; /* dark pink/red text */
+    height: 100vh;
     display: flex;
     flex-direction: column;
   }
 
-  /* Container for main content */
+  /* Scrollable main content */
   .content {
     flex: 1;
-    padding: 20px;
     overflow-y: auto;
+    padding: 10px 15px 70px 15px; /* bottom padding for nav */
   }
 
-  /* Header with language globe icon */
-  header {
-    display: flex;
-    justify-content: flex-end;
-    padding: 10px 20px;
-  }
-  .lang-btn {
-    background: transparent;
-    border: none;
-    font-size: 1.8rem;
-    color: #ffd700;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.3s;
-  }
-  .lang-btn:hover {
-    color: #ff4500; /* red touch */
-  }
-
-  /* Task sections */
-  section.task-section {
-    background: linear-gradient(135deg, #001f4d, #660000);
+  /* Top balance bar */
+  .balance-bar {
+    background: #f4b6d7;
     border-radius: 15px;
-    padding: 15px 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-    animation: fadeInUp 0.8s ease forwards;
-  }
-  section.task-section h3 {
-    margin: 0 0 10px 0;
-    color: #ffd700;
-    font-weight: 700;
-    text-shadow: 0 0 6px #ffd700aa;
-  }
-  .task-values {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-  }
-  .task-value {
-    background: #ff4500; /* red touch */
-    border-radius: 10px;
     padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 15px #f4b6d7aa;
+    color: #d6006c;
     font-weight: 700;
-    box-shadow: 0 0 8px #ff4500cc;
-    cursor: pointer;
-    flex: 1 1 80px;
-    text-align: center;
-    color: #fff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-size: 1rem;
   }
-  .task-value:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 15px #ffd700;
+  .balance-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .balance-left svg {
+    fill: #d6006c;
+    width: 20px;
+    height: 20px;
+  }
+  .balance-amount {
+    font-size: 1.2rem;
+  }
+  .withdraw-btn {
+    color: #d6006c;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+  .withdraw-btn:hover {
+    text-decoration: underline;
+  }
+  .balance-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.3rem;
+    cursor: pointer;
   }
 
-  /* Official Channel placeholder */
+  /* Official Channel banner */
   .official-channel {
-    background: #660000;
+    background: white;
     border-radius: 15px;
-    margin-bottom: 25px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 0 10px #ffd700aa;
-    color: #ffd700;
-    font-weight: 700;
-    font-size: 1.1rem;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    box-shadow: 0 2px 10px rgba(214,0,108,0.3);
   }
   .official-channel img {
-    max-width: 100%;
-    border-radius: 15px;
-    margin-top: 10px;
-    box-shadow: 0 0 10px #ff4500;
+    height: 90px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .official-channel-text {
+    margin-left: 15px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #d6006c;
+    user-select: none;
   }
 
-  /* Bottom Navigation Bar */
+  /* Task card base */
+  .task-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px 15px 15px 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(214,0,108,0.25);
+    color: #d6006c;
+  }
+  .task-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .task-header .title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .task-header .title img,
+  .task-header .title svg {
+    width: 22px;
+    height: 22px;
+  }
+  .task-header .amount {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .task-subtitle {
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 3px;
+    margin-bottom: 10px;
+  }
+
+  /* Progress bar container */
+  .progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  /* Black box with amount */
+  .progress-box {
+    background: #1a1a1a;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    min-width: 40px;
+    text-align: center;
+    user-select: none;
+  }
+  /* Connecting line */
+  .progress-line {
+    flex-grow: 1;
+    height: 2px;
+    background: #d6006c;
+    margin: 0 2px;
+  }
+
+  /* Audio icon and text row */
+  .audio-row {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #d6006c;
+    user-select: none;
+  }
+  .audio-row svg {
+    width: 16px;
+    height: 16px;
+    fill: #d6006c;
+  }
+
+  /* Detail button */
+  .detail-btn {
+    float: right;
+    margin-top: 8px;
+    background: #f4b6d7;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    color: #d6006c;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 2px 6px #f4b6d7aa;
+    transition: background-color 0.3s ease;
+    user-select: none;
+  }
+  .detail-btn:hover {
+    background: #d6006c;
+    color: white;
+  }
+
+  /* Bottom navigation bar */
   nav.bottom-nav {
-    background: #001f4d;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 55px;
+    background: white;
+    box-shadow: 0 -1px 10px rgba(214,0,108,0.3);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    height: 60px;
-    box-shadow: 0 -2px 10px rgba(255, 215, 0, 0.7);
+    z-index: 100;
   }
   nav.bottom-nav a {
-    color: #ffd700;
     text-decoration: none;
-    font-size: 1.4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: color 0.3s;
-    cursor: pointer;
-  }
-  nav.bottom-nav a:hover,
-  nav.bottom-nav a.active {
-    color: #ff4500;
-  }
-  nav.bottom-nav a span.icon {
-    font-size: 1.8rem;
-  }
-  nav.bottom-nav a span.label {
-    font-size: 0.75rem;
-    margin-top: 3px;
-  }
-
-  /* Language Modal */
-  .modal-bg {
-    position: fixed;
-    top: 0; left: 0; right:0; bottom:0;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease forwards;
-  }
-  .modal-bg.active {
-    display: flex;
-  }
-  .modal {
-    background: linear-gradient(135deg, #ffb6c1, #ff69b4);
-    border-radius: 20px;
-    width: 320px;
-    max-width: 90vw;
-    padding: 20px;
-    box-shadow: 0 0 25px #ff69b4cc;
-    color: #660000;
-    text-align: center;
-    animation: slideUp 0.4s ease forwards;
-  }
-  .modal h2 {
-    margin: 0 0 15px 0;
+    color: #d6006c;
+    font-size: 0.7rem;
     font-weight: 700;
-  }
-  .country-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  .country-card {
-    background: #ffe4e1cc;
-    border-radius: 15px;
-    padding: 10px;
-    cursor: pointer;
-    box-shadow: 0 0 10px #ff69b4aa;
-    transition: background-color 0.3s, box-shadow 0.3s;
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
   }
-  .country-card:hover {
-    background: #ff69b4;
-    box-shadow: 0 0 15px #ff1493;
-    color: #fff;
+  nav.bottom-nav a.active {
+    color: #ff1a75;
   }
-  .country-card.selected {
-    background: #fff;
-    box-shadow: 0 0 20px #ff1493;
-    color: #000;
-    font-weight: 700;
-  }
-  .country-flag {
-    width: 50px;
-    height: 30px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 8px;
-    box-shadow: 0 0 6px #ff69b4aa;
-  }
-  .country-name {
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-  .country-native {
-    font-size: 0.8rem;
-    margin-top: 2px;
-    font-style: italic;
-  }
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  .btn-cancel, .btn-yes {
-    flex: 1;
-    padding: 10px;
-    border-radius: 15px;
-    border: none;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0 5px;
-  }
-  .btn-cancel {
-    background: #ff69b4cc;
-    color: #660000;
-  }
-  .btn-cancel:hover {
-    background: #ff1493;
-    color: #fff;
-  }
-  .btn-yes {
-    background: #660000;
-    color: #ffd700;
-  }
-  .btn-yes:hover {
-    background: #990000;
+  nav.bottom-nav a svg {
+    width: 22px;
+    height: 22px;
+    margin-bottom: 2px;
+    fill: currentColor;
   }
 
-  /* Animations */
-  @keyframes fadeInUp {
-    0% {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Scrollbar styling for content */
+  .content::-webkit-scrollbar {
+    width: 6px;
   }
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-  @keyframes slideUp {
-    from {transform: translateY(30px); opacity: 0;}
-    to {transform: translateY(0); opacity: 1;}
+  .content::-webkit-scrollbar-thumb {
+    background: #d6006c;
+    border-radius: 3px;
   }
 
   /* Responsive */
-  @media(max-width: 400px) {
-    .country-grid {
-      grid-template-columns: 1fr;
+  @media (max-width: 420px) {
+    .official-channel {
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 10px;
     }
-    nav.bottom-nav a span.label {
-      font-size: 0.6rem;
+    .official-channel img {
+      height: 70px;
+    }
+    .official-channel-text {
+      margin-left: 0;
+      margin-top: 8px;
+      font-size: 1.1rem;
     }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <button class="lang-btn" id="openLangModal" title="Select Language" aria-label="Select Language">🌎</button>
-</header>
+<div class="content" role="main" aria-label="Home Tasks">
 
-<div class="content">
-
-  <section class="task-section" style="animation-delay: 0.1s;">
-    <h3>Invite Task</h3>
-    <div class="task-values">
-      <div class="task-value">₦5000</div>
+  <!-- Balance bar -->
+  <div class="balance-bar" aria-label="Balance and actions">
+    <div class="balance-left" aria-live="polite">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7v13h20V7l-10-5z"/></svg>
+      <span class="balance-amount" id="balanceAmount">0 ₦</span>
     </div>
-  </section>
-
-  <section class="task-section" style="animation-delay: 0.3s;">
-    <h3>Standing Machine Task</h3>
-    <div class="task-values">
-      <div class="task-value">₦100</div>
-      <div class="task-value">₦200</div>
-      <div class="task-value">₦400</div>
-      <div class="task-value">₦500</div>
+    <div class="withdraw-btn" role="button" tabindex="0" id="withdrawBtn" aria-label="Withdraw balance">WITHDRAW</div>
+    <div class="balance-right">
+      <button id="langSelectorBtn" aria-label="Select Language" title="Select Language" style="background:none;border:none;color:#d6006c;cursor:pointer;font-size:1.3rem;">A</button>
+      <button id="globeBtn" aria-label="Select Country" title="Select Country" style="background:none;border:none;color:#d6006c;cursor:pointer;font-size:1.3rem;">🌍</button>
     </div>
-  </section>
+  </div>
 
-  <section class="task-section" style="animation-delay: 0.5s;">
-    <h3>Scan Code Tasks</h3>
-    <div class="task-values">
-      <div class="task-value">₦100</div>
-      <div class="task-value">₦1000</div>
-      <div class="task-value">₦2000</div>
+  <!-- Official Channel Banner -->
+  <div class="official-channel" aria-label="Official Channel Banner">
+    <img src="https://i.imgur.com/7m9QG3r.png" alt="Official Channel Character" />
+    <div class="official-channel-text">Official Channel</div>
+  </div>
+
+  <!-- Invite Task -->
+  <div class="task-card" role="region" aria-labelledby="inviteTaskTitle">
+    <div class="task-header">
+      <div class="title" id="inviteTaskTitle">
+        <img src="https://img.icons8.com/fluency/48/000000/referral.png" alt="Invite Task Icon" />
+        INVITE TASK
+      </div>
+      <div class="amount" id="inviteTaskAmount" tabindex="0" role="link" aria-label="Referral reward five thousand naira" style="cursor:pointer; user-select:none;">₦ 5000</div>
     </div>
-  </section>
+    <div class="task-subtitle" id="inviteTaskSub">0 Friends</div>
+    <button class="detail-btn" aria-label="Details for Invite Task" id="inviteDetailBtn">DETAIL</button>
+  </div>
 
-  <div class="official-channel">
-    Official Channel
-    <img src="https://via.placeholder.com/300x120?text=Official+Channel" alt="Official Channel" />
+  <!-- Standing Machine Task -->
+  <div class="task-card" role="region" aria-labelledby="standingTaskTitle">
+    <div class="task-header">
+      <div class="title" id="standingTaskTitle">
+        <img src="https://img.icons8.com/fluency/48/000000/machine.png" alt="Standing Machine Icon" />
+        STANDING MACHINE TASK
+      </div>
+      <div class="amount" id="standingTaskAmount">₦ 525+</div>
+    </div>
+    <div class="task-subtitle" id="standingTaskSub">0 M</div>
+
+    <div class="progress-bar" aria-label="Standing Machine Task progress">
+      <div class="progress-box">30₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">45₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">75₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">150₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">225₦</div>
+    </div>
+
+    <div class="audio-row" aria-label="Standing machine audio description">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+      Standing3000 M 150 - 150₦
+    </div>
+    <button class="detail-btn" aria-label="Details for Standing Machine Task">DETAIL</button>
+  </div>
+
+  <!-- Scan Code Tasks -->
+  <div class="task-card" role="region" aria-labelledby="scanCodeTaskTitle">
+    <div class="task-header">
+      <div class="title" id="scanCodeTaskTitle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#00cc44" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
+        SCAN CODE TASKS
+      </div>
+      <div class="amount" id="scanCodeTaskAmount">₦ 1245+</div>
+    </div>
+    <div class="task-subtitle" id="scanCodeTaskSub">Account</div>
+
+    <div class="progress-bar" aria-label="Scan Code Task progress">
+      <div class="progress-box">165₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">315₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">765₦</div>
+    </div>
+
+    <div class="audio-row" aria-label="Scan code audio description">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+      ScanCode1 Account 165 - 165₦
+    </div>
+    <button class="detail-btn" aria-label="Details for Scan Code Task">DETAIL</button>
+  </div>
+
+  <!-- Team Task -->
+  <div class="task-card" role="region" aria-labelledby="teamTaskTitle">
+    <div class="task-header">
+      <div class="title" id="teamTaskTitle">
+        <img src="https://img.icons8.com/fluency/48/000000/teamwork.png" alt="Team Task Icon" />
+        टीम कार्य
+      </div>
+      <div class="amount" id="teamTaskAmount">₦ 13260+</div>
+    </div>
+    <div class="task-subtitle" id="teamTaskSub">0 People</div>
+
+    <div class="progress-bar" aria-label="Team Task progress">
+      <div class="progress-box">465₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">1515₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">3765₦</div>
+      <div class="progress-line"></div>
+      <div class="progress-box">7515₦</div>
+    </div>
+
+    <div class="audio-row" aria-label="Team task audio description">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg>
+      Invite50 People 3765 - 3765₦
+    </div>
+    <button class="detail-btn" aria-label="Details for Team Task">DETAIL</button>
   </div>
 
 </div>
 
 <!-- Bottom Navigation -->
 <nav class="bottom-nav" aria-label="Bottom Navigation">
-  <a href="home.html" class="active" aria-current="page">
-    <span class="icon">🏠</span>
-    <span class="label">Home</span>
+  <a href="home.html" class="active" aria-current="page" aria-label="Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Home
   </a>
-  <a href="linking.html">
-    <span class="icon">🔲</span>
-    <span class="label">Scan Code</span>
+  <a href="linking.html" aria-label="Scan Code">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
+    Scan Code
   </a>
-  <a href="account.html">
-    <span class="icon">💼</span>
-    <span class="label">Wallet</span>
+  <a href="account.html" aria-label="Wallet">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M21 7v10c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7h18zM7 9h10v6H7V9zm14-4H3c-1.1 0-2 .9-2 2v1h22V7c0-1.1-.9-2-2-2z"/></svg>
+    Wallet
   </a>
-  <a href="referral.html">
-    <span class="icon">👤</span>
-    <span class="label">Profile</span>
+  <a href="referral.html" aria-label="Profile">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    Profile
   </a>
 </nav>
 
-<!-- Language Modal -->
-<div class="modal-bg" id="langModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-  <div class="modal">
-    <h2 id="modalTitle">Select Country</h2>
-    <div class="country-grid">
-      <div class="country-card" data-code="BD" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag" />
-        <div class="country-name">Bangladesh</div>
-        <div class="country-native">বাংলাদেশ</div>
-      </div>
-      <div class="country-card" data-code="IN" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/in.png" alt="India Flag" />
-        <div class="country-name">India</div>
-        <div class="country-native">हिन्दी</div>
-      </div>
-      <div class="country-card" data-code="ID" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/id.png" alt="Indonesia Flag" />
-        <div class="country-name">Indonesia</div>
-        <div class="country-native">Indonesia</div>
-      </div>
-      <div class="country-card" data-code="NG" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/ng.png" alt="Nigeria Flag" />
-        <div class="country-name">Nigeria</div>
-        <div class="country-native">Nijerîya</div>
-      </div>
-      <div class="country-card" data-code="PK" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/pk.png" alt="Pakistan Flag" />
-        <div class="country-name">Pakistan</div>
-        <div class="country-native">پاکستان</div>
-      </div>
-      <div class="country-card" data-code="US" tabindex="0">
-        <img class="country-flag" src="https://flagcdn.com/w40/us.png" alt="USA Flag" />
-        <div class="country-name">USA</div>
-        <div class="country-native">English</div>
-      </div>
-    </div>
-    <div class="modal-buttons">
-      <button class="btn-cancel" id="cancelLang">Cancel</button>
-      <button class="btn-yes" id="confirmLang">Yes</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  // Elements
-  const langBtn = document.getElementById('openLangModal');
-  const langModal = document.getElementById('langModal');
-  const cancelBtn = document.getElementById('cancelLang');
-  const confirmBtn = document.getElementById('confirmLang');
-  const countryCards = langModal.querySelectorAll('.country-card');
-
-  // Load selected language from localStorage or default Nigeria
-  let selectedLangCode = localStorage.getItem('selectedLang') || 'NG';
-
-  function updateSelectionUI() {
-    countryCards.forEach(card => {
-      if (card.dataset.code === selectedLangCode) {
-        card.classList.add('selected');
-        card.setAttribute('aria-selected', 'true');
-      } else {
-        card.classList.remove('selected');
-        card.setAttribute('aria-selected', 'false');
-      }
-    });
-  }
-  updateSelectionUI();
-
-  // Open modal
-  langBtn.addEventListener('click', () => {
-    langModal.classList.add('active');
-    langModal.focus();
+  // Referral amount click redirects to referral.html
+  document.getElementById('inviteTaskAmount').addEventListener('click', () => {
+    window.location.href = 'referral.html';
   });
-
-  // Close modal function
-  function closeModal() {
-    langModal.classList.remove('active');
-  }
-
-  cancelBtn.addEventListener('click', () => {
-    closeModal();
-  });
-
-  // Select country on click or keyboard
-  countryCards.forEach(card => {
-    card.addEventListener('click', () => {
-      selectedLangCode = card.dataset.code;
-      updateSelectionUI();
-    });
-    card.addEventListener('keydown', e => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        selectedLangCode = card.dataset.code;
-        updateSelectionUI();
-      }
-    });
-  });
-
-  // Confirm selection
-  confirmBtn.addEventListener('click', () => {
-    localStorage.setItem('selectedLang', selectedLangCode);
-    alert('Language set to ' + selectedLangCode);
-    closeModal();
-  });
-
-  // Close modal on outside click
-  langModal.addEventListener('click', e => {
-    if (e.target === langModal) {
-      closeModal();
+  document.getElementById('inviteTaskAmount').addEventListener('keypress', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = 'referral.html';
     }
   });
 
-  // Accessibility: trap focus inside modal when open
-  langModal.addEventListener('keydown', e => {
-    if (e.key === 'Tab') {
-      const focusableElements = langModal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
-      const firstEl = focusableElements[0];
-      const lastEl = focusableElements[focusableElements.length -1];
-      if (e.shiftKey) {
-        if (document.activeElement === firstEl) {
-          e.preventDefault();
-          lastEl.focus();
-        }
-      } else {
-        if (document.activeElement === lastEl) {
-          e.preventDefault();
-          firstEl.focus();
-        }
-      }
+  // Withdraw button click (can be customized)
+  document.getElementById('withdrawBtn').addEventListener('click', () => {
+    alert('Withdraw function not implemented yet.');
+  });
+  document.getElementById('withdrawBtn').addEventListener('keypress', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      alert('Withdraw function not implemented yet.');
     }
-    if (e.key === 'Escape') {
-      closeModal();
-    }
+  });
+
+  // Language selector buttons (placeholders)
+  document.getElementById('langSelectorBtn').addEventListener('click', () => {
+    alert('Language selector clicked.');
+  });
+  document.getElementById('globeBtn').addEventListener('click', () => {
+    alert('Country selector clicked.');
   });
 </script>
 
