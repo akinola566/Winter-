@@ -17,6 +17,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   /* Scrollable main content */
@@ -77,20 +78,19 @@
     margin-bottom: 12px;
     display: flex;
     align-items: center;
-    padding: 10px 15px;
-    box-shadow: 0 2px 10px rgba(214,0,108,0.3);
+    padding: 15px 20px;
+    box-shadow: 0 2px 15px rgba(214,0,108,0.4);
   }
   .official-channel img {
-  width: 140px;   /* new width */
-  height: auto;   /* maintain aspect ratio */
-  border-radius: 12px;
-  flex-shrink: 0;
-}
-
+    width: 180px;   /* increased width */
+    height: auto;   /* maintain aspect ratio */
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
   .official-channel-text {
-    margin-left: 15px;
+    margin-left: 20px;
     font-weight: 700;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     color: #d6006c;
     user-select: none;
   }
@@ -270,18 +270,128 @@
     }
     .official-channel img {
       height: 70px;
+      width: auto;
     }
     .official-channel-text {
       margin-left: 0;
       margin-top: 8px;
-      font-size: 1.1rem;
+      font-size: 1.3rem;
     }
+  }
+
+  /* --- POPUP OVERLAY --- */
+  #winterPopupOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(214,0,108,0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeInOverlay 0.8s ease forwards;
+  }
+  @keyframes fadeInOverlay {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  #winterPopup {
+    background: #fff0f8;
+    border-radius: 25px;
+    width: 90%;
+    max-width: 420px;
+    padding: 30px 25px 40px 25px;
+    box-shadow: 0 0 30px #ff4db8, 0 0 60px #ff85c1;
+    text-align: center;
+    position: relative;
+    user-select: none;
+    animation: glowPulse 2.5s infinite ease-in-out;
+  }
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 15px #00dfff, 0 0 30px #00dfff;
+    }
+    50% {
+      box-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+    }
+  }
+
+  #winterPopup h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #0099cc;
+    margin-bottom: 20px;
+    text-shadow: 0 0 8px #00e5ff, 0 0 15px #00ffff;
+  }
+
+  #winterPopup img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 0 25px #ff4db8;
+  }
+
+  #winterPopup p {
+    color: #d6006c;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.4;
+  }
+
+  #winterPopup .btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  #winterPopup button {
+    background: linear-gradient(90deg, #00dfff, #0099cc);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 0 15px #00dfff;
+    transition: background 0.3s ease;
+    user-select: none;
+    flex: 1;
+  }
+  #winterPopup button:hover {
+    background: linear-gradient(90deg, #0099cc, #00dfff);
+  }
+  #winterPopup button.cancel-btn {
+    background: #d6006c;
+    box-shadow: 0 0 15px #ff4db8;
+  }
+  #winterPopup button.cancel-btn:hover {
+    background: #ff1a75;
   }
 </style>
 </head>
 <body>
 
-<div class="content" role="main" aria-label="Home Tasks">
+<!-- POPUP OVERLAY -->
+<div id="winterPopupOverlay" role="dialog" aria-modal="true" aria-labelledby="winterPopupTitle" aria-describedby="winterPopupDesc">
+  <div id="winterPopup">
+    <h1 id="winterPopupTitle">Winter 🥶</h1>
+    <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" alt="Official Channel Banner" />
+    <p id="winterPopupDesc">
+      Join our <strong>WhatsApp Channel</strong> to continue for more updates.<br />
+      This is <strong>necessary</strong> for withdrawal purposes.<br />
+      Your withdrawal will not drop if you don't join.<br />
+      So, join now!
+    </p>
+    <div class="btn-group">
+      <button id="joinChannelBtn" aria-label="Join WhatsApp Channel">Join Channel Now</button>
+      <button id="cancelPopupBtn" class="cancel-btn" aria-label="Cancel and close popup">Cancel ❌</button>
+    </div>
+  </div>
+</div>
+
+<div class="content" role="main" aria-label="Home Tasks" aria-hidden="true">
 
   <!-- Balance bar -->
   <div class="balance-bar" aria-label="Balance and actions">
@@ -298,7 +408,7 @@
 
   <!-- Official Channel Banner -->
   <div class="official-channel" aria-label="Official Channel Banner">
-    <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Official Channel Character" />
+    <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" alt="Official Channel Character" />
     <div class="official-channel-text">Official Channel</div>
   </div>
 
@@ -306,7 +416,7 @@
   <div class="task-card" role="region" aria-labelledby="inviteTaskTitle">
     <div class="task-header">
       <div class="title" id="inviteTaskTitle">
-        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Invite Task Icon" />
+        <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" alt="Invite Task Icon" />
         INVITE TASK
       </div>
       <div class="amount" id="inviteTaskAmount" tabindex="0" role="link" aria-label="Referral reward five thousand naira" style="cursor:pointer; user-select:none;">₦ 5000</div>
@@ -319,7 +429,7 @@
   <div class="task-card" role="region" aria-labelledby="standingTaskTitle">
     <div class="task-header">
       <div class="title" id="standingTaskTitle">
-        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Standing Machine Icon" />
+        <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" alt="Standing Machine Icon" />
         STANDING MACHINE TASK
       </div>
       <div class="amount" id="standingTaskAmount">₦ 525+</div>
@@ -349,7 +459,7 @@
   <div class="task-card" role="region" aria-labelledby="scanCodeTaskTitle">
     <div class="task-header">
       <div class="title" id="scanCodeTaskTitle">
-        <svg xmlns="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" fill="#00cc44" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
+        <svg xmlns="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" fill="#00cc44" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
         SCAN CODE TASKS
       </div>
       <div class="amount" id="scanCodeTaskAmount">₦ 1245+</div>
@@ -375,7 +485,7 @@
   <div class="task-card" role="region" aria-labelledby="teamTaskTitle">
     <div class="task-header">
       <div class="title" id="teamTaskTitle">
-        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Team Task Icon" />
+        <img src="https://d41chssnpqdne.cloudfront.net/user_upload_by_module/chat_bot/files/151225521/C1Lc54802jCshBOm.jpeg" alt="Team Task Icon" />
         टीम कार्य
       </div>
       <div class="amount" id="teamTaskAmount">₦ 13260+</div>
@@ -422,6 +532,49 @@
 </nav>
 
 <script>
+  // Elements
+  const winterPopupOverlay = document.getElementById('winterPopupOverlay');
+  const content = document.querySelector('.content');
+  const joinChannelBtn = document.getElementById('joinChannelBtn');
+  const cancelPopupBtn = document.getElementById('cancelPopupBtn');
+
+  // Initially hide main content for accessibility
+  content.setAttribute('aria-hidden', 'true');
+
+  // Join Channel Button click simulation
+  joinChannelBtn.addEventListener('click', () => {
+    // Change button text to "Already Joined"
+    joinChannelBtn.textContent = "Already Joined";
+    joinChannelBtn.disabled = true;
+    joinChannelBtn.style.cursor = "default";
+
+    // Show a glowing effect on the button
+    joinChannelBtn.style.boxShadow = "0 0 20px #00ffff";
+
+    // After 1.5 seconds, close popup and show main content
+    setTimeout(() => {
+      winterPopupOverlay.style.display = 'none';
+      content.setAttribute('aria-hidden', 'false');
+      content.focus();
+    }, 1500);
+  });
+
+  // Cancel button closes popup immediately and shows main content
+  cancelPopupBtn.addEventListener('click', () => {
+    winterPopupOverlay.style.display = 'none';
+    content.setAttribute('aria-hidden', 'false');
+    content.focus();
+  });
+
+  // Accessibility: allow keyboard to close popup with Esc key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && winterPopupOverlay.style.display !== 'none') {
+      winterPopupOverlay.style.display = 'none';
+      content.setAttribute('aria-hidden', 'false');
+      content.focus();
+    }
+  });
+
   // Referral amount click redirects to referral.html
   document.getElementById('inviteTaskAmount').addEventListener('click', () => {
     window.location.href = 'referral.html';
