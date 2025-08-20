@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invite - Task Market</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f8d7e3; /* light pink */
+    color: #d6006c; /* dark pink */
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    animation: fadeInPage 0.5s ease forwards;
+  }
+
+  /* Fade in animation */
+  @keyframes fadeInPage {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  /* Top bar */
+  header {
+    background: #f4b6d7;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    box-shadow: 0 2px 10px rgba(214,0,108,0.3);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    position: relative;
+    user-select: none;
+  }
+  header .back-btn {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+    margin-right: 10px;
+    flex-shrink: 0;
+  }
+  header .title {
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+  }
+
+  /* Main content scroll */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px 15px 80px 15px;
+  }
+
+  /* Invite Code box */
+  .invite-code-box {
+    background: white;
+    border-radius: 15px;
+    padding: 20px 15px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 10px rgba(214,0,108,0.2);
+    text-align: center;
+    user-select: text;
+  }
+  .invite-code-box label {
+    font-weight: 600;
+    color: #888;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .invite-code {
+    font-weight: 900;
+    font-size: 1.8rem;
+    color: #d6006c;
+    letter-spacing: 0.1em;
+  }
+
+  /* Get Link button */
+  .get-link-btn {
+    background: linear-gradient(90deg, #f4b6d7, #f97fb0);
+    border: none;
+    border-radius: 25px;
+    padding: 14px 0;
+    width: 100%;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px #f97fb0aa;
+    transition: background 0.3s ease;
+    user-select: none;
+  }
+  .get-link-btn:hover {
+    background: linear-gradient(90deg, #f97fb0, #f4b6d7);
+  }
+  .get-link-btn:active {
+    transform: scale(0.98);
+  }
+
+  /* Link icon */
+  .get-link-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: white;
+  }
+
+  /* Rewards section */
+  .rewards-section {
+    margin-top: 25px;
+    text-align: center;
+  }
+  .rewards-title {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #d6006c;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+  .rewards-title svg {
+    width: 24px;
+    height: 24px;
+  }
+  .reward-cards {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 10px;
+  }
+  .reward-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(214,0,108,0.2);
+    width: 140px;
+    padding: 15px 10px;
+    user-select: none;
+    cursor: default;
+  }
+  .reward-card img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+  }
+  .reward-card .reward-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #444;
+    margin-bottom: 6px;
+  }
+  .reward-card .reward-amount {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #f97fb0;
+  }
+
+  /* Tabs */
+  .tabs {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #f97fb0;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px 0 12px 0;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #444;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  .tab.active {
+    color: #f97fb0;
+  }
+  .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 3px;
+    background: #f97fb0;
+    border-radius: 2px;
+  }
+  .tab .icon {
+    display: block;
+    font-size: 1.8rem;
+    margin-bottom: 4px;
+  }
+
+  /* Steps instructions */
+  .steps {
+    background: white;
+    border-radius: 15px;
+    margin-top: 15px;
+    padding: 20px 15px;
+    box-shadow: 0 2px 10px rgba(214,0,108,0.2);
+    user-select: none;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #d6006c;
+  }
+  .step:last-child {
+    margin-bottom: 0;
+  }
+  .step-number {
+    background: #f97fb0;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+    user-select: none;
+  }
+  .step-title {
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  .step-desc {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #555;
+  }
+
+  /* Scrollbar */
+  main::-webkit-scrollbar {
+    width: 6px;
+  }
+  main::-webkit-scrollbar-thumb {
+    background: #d6006c;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    .reward-cards {
+      flex-direction: column;
+      width: 100%;
+      gap: 12px;
+    }
+    .reward-card {
+      width: 100%;
+    }
+    .tabs {
+      flex-direction: column;
+      border-bottom: none;
+    }
+    .tab {
+      border-bottom: 2px solid #f97fb0;
+      padding: 12px 0;
+    }
+    .tab.active::after {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header role="banner">
+  <svg class="back-btn" tabindex="0" role="button" aria-label="Go back" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+  </svg>
+  <div class="title">Invite</div>
+</header>
+
+<main role="main" aria-label="Invite page content">
+
+  <div class="invite-code-box" aria-live="polite" aria-atomic="true">
+    <label for="inviteCode">Your Invite Code</label>
+    <div id="inviteCode" class="invite-code" tabindex="0" aria-label="Invite code D D D 7 6 D D A">DDD76DDA</div>
+  </div>
+
+  <button class="get-link-btn" id="getLinkBtn" aria-label="Get referral link and copy to clipboard">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12a5 5 0 0 1 0-7.07l2.12-2.12a5 5 0 0 1 7.07 7.07l-.71.71 1.42 1.42.71-.71a5 5 0 0 1 7.07 7.07l-2.12 2.12a5 5 0 0 1-7.07 0l-1.42-1.42-.71.71-1.42-1.42.71-.71a5 5 0 0 1-7.07 0zm1.41-5.66a3 3 0 0 0 0 4.24l2.12 2.12a3 3 0 0 0 4.24 0l.71-.71-1.42-1.42-.71.71a1 1 0 0 1-1.42-1.42l.71-.71-1.42-1.42-.71.71z"/></svg>
+    Get Link
+  </button>
+
+  <section class="rewards-section" aria-label="Rewards">
+    <div class="rewards-title">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="#f97fb0" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 3.87 3.13 7 7 7s7-3.13 7-7c0-3.87-3.13-7-7-7zm0 12c-2.76 0-5-2.24-5-5a5 5 0 0 1 10 0c0 2.76-2.24 5-5 5zM9 20v-2h6v2H9z"/></svg>
+      Rewards
+    </div>
+    <div class="reward-cards">
+      <div class="reward-card" tabindex="0" aria-label="Invite Reward 1500 naira">
+        <img src="https://img.icons8.com/color/96/000000/group.png" alt="Invite Reward Icon" />
+        <div class="reward-name">Invite Reward</div>
+        <div class="reward-amount">₦1500</div>
+      </div>
+      <div class="reward-card" tabindex="0" aria-label="Stage Reward 1500 naira">
+        <img src="https://img.icons8.com/color/96/000000/trophy.png" alt="Stage Reward Icon" />
+        <div class="reward-name">Stage Reward</div>
+        <div class="reward-amount">₦1500</div>
+      </div>
+    </div>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Invite page tabs">
+    <div class="tab active" role="tab" aria-selected="true" tabindex="0" aria-controls="tabInvite" id="tabInviteBtn">
+      <span class="icon">👥</span> Invite New User
+    </div>
+    <div class="tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="tabGroup" id="tabGroupBtn">
+      <span class="icon">🤝</span> Join Group
+    </div>
+    <div class="tab" role="tab" aria-selected="false" tabindex="-1" aria-controls="tabOnline" id="tabOnlineBtn">
+      <span class="icon">🔔</span> Online Time
+    </div>
+  </nav>
+
+  <section class="steps" id="tabInvite" role="tabpanel" aria-labelledby="tabInviteBtn">
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-title">Share with friends</div>
+      <div class="step-desc">Share your invite link with friends and family</div>
+    </div>
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-title">Registro</div>
+      <div class="step-desc">They register using your invite code</div>
+    </div>
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-title">Receive cash</div>
+      <div class="step-desc">Get instant rewards when they join</div>
+    </div>
+  </section>
+
+  <!-- Placeholder for other tabs content -->
+  <section class="steps" id="tabGroup" role="tabpanel" aria-labelledby="tabGroupBtn" hidden>
+    <p style="text-align:center; color:#d6006c; font-weight:700;">Join Group content coming soon!</p>
+  </section>
+  <section class="steps" id="tabOnline" role="tabpanel" aria-labelledby="tabOnlineBtn" hidden>
+    <p style="text-align:center; color:#d6006c; font-weight:700;">Online Time content coming soon!</p>
+  </section>
+
+</main>
+
+<script>
+  // Simulated login check
+  const isLoggedIn = false; // Change to true to simulate logged in user
+
+  // Redirect if not logged in
+  if (!isLoggedIn) {
+    alert('You must login to access the referral page.');
+    window.location.href = 'login.html'; // Redirect to login page
+  }
+
+  // Tabs functionality
+  const tabs = document.querySelectorAll('.tab');
+  const tabPanels = document.querySelectorAll('section[role="tabpanel"]');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+        t.tabIndex = -1;
+      });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected', 'true');
+      tab.tabIndex = 0;
+
+      tabPanels.forEach(panel => {
+        panel.hidden = true;
+      });
+      const targetPanel = document.getElementById(tab.getAttribute('aria-controls'));
+      if (targetPanel) targetPanel.hidden = false;
+    });
+
+    tab.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        let index = Array.from(tabs).indexOf(e.target);
+        if (e.key === 'ArrowRight') index++;
+        else index--;
+        if (index < 0) index = tabs.length - 1;
+        if (index >= tabs.length) index = 0;
+        tabs[index].focus();
+      }
+    });
+  });
+
+  // Copy referral message + link to clipboard
+  const getLinkBtn = document.getElementById('getLinkBtn');
+  const inviteCode = document.getElementById('inviteCode').textContent.trim();
+
+  getLinkBtn.addEventListener('click', () => {
+    const message = `Hello! Join us now and explore. Imagine ₦5000 per referral! We are doing something great, what about you? Be the first to withdraw! \n\nInvite Code: ${inviteCode}\nhttps://akinola566.github.io/Winter-/home.html`;
+    navigator.clipboard.writeText(message).then(() => {
+      alert('Referral message copied to clipboard!');
+    }).catch(() => {
+      alert('Failed to copy. Please copy manually:\n' + message);
+    });
+  });
+
+  // Back button functionality
+  document.querySelector('.back-btn').addEventListener('click', () => {
+    window.history.back();
+  });
+  document.querySelector('.back-btn').addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.history.back();
+    }
+  });
+</script>
+
+</body>
+</html>
