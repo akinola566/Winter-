@@ -141,11 +141,11 @@
   .progress-box {
     background: #1a1a1a;
     color: white;
-    padding: 6px 10px;
+    padding: 6px 14px; /* Increased horizontal padding */
     border-radius: 4px;
     font-weight: 700;
-    font-size: 0.85rem;
-    min-width: 40px;
+    font-size: 1rem; /* Increased font size */
+    min-width: 60px; /* Increased min width */
     text-align: center;
     user-select: none;
   }
@@ -236,6 +236,29 @@
     border-radius: 3px;
   }
 
+  /* Telegram button - bigger and styled */
+  .balance-right button#globeBtn {
+    font-size: 1.9rem; /* increased from 1.3rem */
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f4b6d7;
+    color: #d6006c;
+    cursor: pointer;
+    user-select: none;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .balance-right button#globeBtn:hover {
+    background: #d6006c;
+    color: white;
+  }
+
   /* Responsive */
   @media (max-width: 420px) {
     .official-channel {
@@ -267,7 +290,7 @@
     <div class="withdraw-btn" role="button" tabindex="0" id="withdrawBtn" aria-label="Withdraw balance">WITHDRAW</div>
     <div class="balance-right">
       <button id="langSelectorBtn" aria-label="Select Language" title="Select Language" style="background:none;border:none;color:#d6006c;cursor:pointer;font-size:1.3rem;">A</button>
-      <button id="globeBtn" aria-label="Select Country" title="Select Country" style="background:none;border:none;color:#d6006c;cursor:pointer;font-size:1.3rem;">🌍</button>
+      <button id="globeBtn" aria-label="Select Country" title="Select Country">🌍</button>
     </div>
   </div>
 
