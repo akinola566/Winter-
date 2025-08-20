@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Home - Task Market</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #003366; /* universal blue */
+    color: #ffd700; /* golden yellow */
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Container for main content */
+  .content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  /* Header with language globe icon */
+  header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px 20px;
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: #ffd700;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .lang-btn:hover {
+    color: #ff4500; /* red touch */
+  }
+
+  /* Task sections */
+  section.task-section {
+    background: linear-gradient(135deg, #001f4d, #660000);
+    border-radius: 15px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  section.task-section h3 {
+    margin: 0 0 10px 0;
+    color: #ffd700;
+    font-weight: 700;
+    text-shadow: 0 0 6px #ffd700aa;
+  }
+  .task-values {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .task-value {
+    background: #ff4500; /* red touch */
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-weight: 700;
+    box-shadow: 0 0 8px #ff4500cc;
+    cursor: pointer;
+    flex: 1 1 80px;
+    text-align: center;
+    color: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .task-value:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px #ffd700;
+  }
+
+  /* Official Channel placeholder */
+  .official-channel {
+    background: #660000;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 0 10px #ffd700aa;
+    color: #ffd700;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .official-channel img {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-top: 10px;
+    box-shadow: 0 0 10px #ff4500;
+  }
+
+  /* Bottom Navigation Bar */
+  nav.bottom-nav {
+    background: #001f4d;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 60px;
+    box-shadow: 0 -2px 10px rgba(255, 215, 0, 0.7);
+  }
+  nav.bottom-nav a {
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: color 0.3s;
+    cursor: pointer;
+  }
+  nav.bottom-nav a:hover,
+  nav.bottom-nav a.active {
+    color: #ff4500;
+  }
+  nav.bottom-nav a span.icon {
+    font-size: 1.8rem;
+  }
+  nav.bottom-nav a span.label {
+    font-size: 0.75rem;
+    margin-top: 3px;
+  }
+
+  /* Language Modal */
+  .modal-bg {
+    position: fixed;
+    top: 0; left: 0; right:0; bottom:0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease forwards;
+  }
+  .modal-bg.active {
+    display: flex;
+  }
+  .modal {
+    background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+    border-radius: 20px;
+    width: 320px;
+    max-width: 90vw;
+    padding: 20px;
+    box-shadow: 0 0 25px #ff69b4cc;
+    color: #660000;
+    text-align: center;
+    animation: slideUp 0.4s ease forwards;
+  }
+  .modal h2 {
+    margin: 0 0 15px 0;
+    font-weight: 700;
+  }
+  .country-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  .country-card {
+    background: #ffe4e1cc;
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff69b4aa;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+  .country-card:hover {
+    background: #ff69b4;
+    box-shadow: 0 0 15px #ff1493;
+    color: #fff;
+  }
+  .country-card.selected {
+    background: #fff;
+    box-shadow: 0 0 20px #ff1493;
+    color: #000;
+    font-weight: 700;
+  }
+  .country-flag {
+    width: 50px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    box-shadow: 0 0 6px #ff69b4aa;
+  }
+  .country-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .country-native {
+    font-size: 0.8rem;
+    margin-top: 2px;
+    font-style: italic;
+  }
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  .btn-cancel, .btn-yes {
+    flex: 1;
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 5px;
+  }
+  .btn-cancel {
+    background: #ff69b4cc;
+    color: #660000;
+  }
+  .btn-cancel:hover {
+    background: #ff1493;
+    color: #fff;
+  }
+  .btn-yes {
+    background: #660000;
+    color: #ffd700;
+  }
+  .btn-yes:hover {
+    background: #990000;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+  @keyframes slideUp {
+    from {transform: translateY(30px); opacity: 0;}
+    to {transform: translateY(0); opacity: 1;}
+  }
+
+  /* Responsive */
+  @media(max-width: 400px) {
+    .country-grid {
+      grid-template-columns: 1fr;
+    }
+    nav.bottom-nav a span.label {
+      font-size: 0.6rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="lang-btn" id="openLangModal" title="Select Language" aria-label="Select Language">🌎</button>
+</header>
+
+<div class="content">
+
+  <section class="task-section" style="animation-delay: 0.1s;">
+    <h3>Invite Task</h3>
+    <div class="task-values">
+      <div class="task-value">₦5000</div>
+    </div>
+  </section>
+
+  <section class="task-section" style="animation-delay: 0.3s;">
+    <h3>Standing Machine Task</h3>
+    <div class="task-values">
+      <div class="task-value">₦100</div>
+      <div class="task-value">₦200</div>
+      <div class="task-value">₦400</div>
+      <div class="task-value">₦500</div>
+    </div>
+  </section>
+
+  <section class="task-section" style="animation-delay: 0.5s;">
+    <h3>Scan Code Tasks</h3>
+    <div class="task-values">
+      <div class="task-value">₦100</div>
+      <div class="task-value">₦1000</div>
+      <div class="task-value">₦2000</div>
+    </div>
+  </section>
+
+  <div class="official-channel">
+    Official Channel
+    <img src="https://via.placeholder.com/300x120?text=Official+Channel" alt="Official Channel" />
+  </div>
+
+</div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav" aria-label="Bottom Navigation">
+  <a href="home.html" class="active" aria-current="page">
+    <span class="icon">🏠</span>
+    <span class="label">Home</span>
+  </a>
+  <a href="linking.html">
+    <span class="icon">🔲</span>
+    <span class="label">Scan Code</span>
+  </a>
+  <a href="account.html">
+    <span class="icon">💼</span>
+    <span class="label">Wallet</span>
+  </a>
+  <a href="referral.html">
+    <span class="icon">👤</span>
+    <span class="label">Profile</span>
+  </a>
+</nav>
+
+<!-- Language Modal -->
+<div class="modal-bg" id="langModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+  <div class="modal">
+    <h2 id="modalTitle">Select Country</h2>
+    <div class="country-grid">
+      <div class="country-card" data-code="BD" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/bd.png" alt="Bangladesh Flag" />
+        <div class="country-name">Bangladesh</div>
+        <div class="country-native">বাংলাদেশ</div>
+      </div>
+      <div class="country-card" data-code="IN" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/in.png" alt="India Flag" />
+        <div class="country-name">India</div>
+        <div class="country-native">हिन्दी</div>
+      </div>
+      <div class="country-card" data-code="ID" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/id.png" alt="Indonesia Flag" />
+        <div class="country-name">Indonesia</div>
+        <div class="country-native">Indonesia</div>
+      </div>
+      <div class="country-card" data-code="NG" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/ng.png" alt="Nigeria Flag" />
+        <div class="country-name">Nigeria</div>
+        <div class="country-native">Nijerîya</div>
+      </div>
+      <div class="country-card" data-code="PK" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/pk.png" alt="Pakistan Flag" />
+        <div class="country-name">Pakistan</div>
+        <div class="country-native">پاکستان</div>
+      </div>
+      <div class="country-card" data-code="US" tabindex="0">
+        <img class="country-flag" src="https://flagcdn.com/w40/us.png" alt="USA Flag" />
+        <div class="country-name">USA</div>
+        <div class="country-native">English</div>
+      </div>
+    </div>
+    <div class="modal-buttons">
+      <button class="btn-cancel" id="cancelLang">Cancel</button>
+      <button class="btn-yes" id="confirmLang">Yes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Elements
+  const langBtn = document.getElementById('openLangModal');
+  const langModal = document.getElementById('langModal');
+  const cancelBtn = document.getElementById('cancelLang');
+  const confirmBtn = document.getElementById('confirmLang');
+  const countryCards = langModal.querySelectorAll('.country-card');
+
+  // Load selected language from localStorage or default Nigeria
+  let selectedLangCode = localStorage.getItem('selectedLang') || 'NG';
+
+  function updateSelectionUI() {
+    countryCards.forEach(card => {
+      if (card.dataset.code === selectedLangCode) {
+        card.classList.add('selected');
+        card.setAttribute('aria-selected', 'true');
+      } else {
+        card.classList.remove('selected');
+        card.setAttribute('aria-selected', 'false');
+      }
+    });
+  }
+  updateSelectionUI();
+
+  // Open modal
+  langBtn.addEventListener('click', () => {
+    langModal.classList.add('active');
+    langModal.focus();
+  });
+
+  // Close modal function
+  function closeModal() {
+    langModal.classList.remove('active');
+  }
+
+  cancelBtn.addEventListener('click', () => {
+    closeModal();
+  });
+
+  // Select country on click or keyboard
+  countryCards.forEach(card => {
+    card.addEventListener('click', () => {
+      selectedLangCode = card.dataset.code;
+      updateSelectionUI();
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectedLangCode = card.dataset.code;
+        updateSelectionUI();
+      }
+    });
+  });
+
+  // Confirm selection
+  confirmBtn.addEventListener('click', () => {
+    localStorage.setItem('selectedLang', selectedLangCode);
+    alert('Language set to ' + selectedLangCode);
+    closeModal();
+  });
+
+  // Close modal on outside click
+  langModal.addEventListener('click', e => {
+    if (e.target === langModal) {
+      closeModal();
+    }
+  });
+
+  // Accessibility: trap focus inside modal when open
+  langModal.addEventListener('keydown', e => {
+    if (e.key === 'Tab') {
+      const focusableElements = langModal.querySelectorAll('button, [tabindex]:not([tabindex="-1"])');
+      const firstEl = focusableElements[0];
+      const lastEl = focusableElements[focusableElements.length -1];
+      if (e.shiftKey) {
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    }
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+</script>
+
+</body>
+</html>
