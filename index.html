@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Login / Register</title>
+<style>
+  /* Reset & base */
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #003366, #660000);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background: linear-gradient(135deg, #001f4d, #990000);
+    border-radius: 15px;
+    width: 350px;
+    padding: 30px 25px;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    position: relative;
+  }
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: gold;
+    text-shadow: 0 0 10px #ffd700;
+  }
+  .toggle-btns {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+  .toggle-btns button {
+    background: transparent;
+    border: none;
+    color: #ccc;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .toggle-btns button.active {
+    color: gold;
+    border-bottom: 2px solid gold;
+  }
+  form {
+    display: none;
+    flex-direction: column;
+  }
+  form.active {
+    display: flex;
+  }
+  label {
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #ffd700cc;
+  }
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="tel"] {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+  }
+  input[type="email"]:focus,
+  input[type="password"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus {
+    box-shadow: 0 0 8px #ffd700;
+  }
+  .invitation-code {
+    background: #003366;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: #ffd700cc;
+    text-align: center;
+  }
+  .security-verification {
+    background: #660000;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #ffb347;
+    user-select: none;
+  }
+  button.submit-btn {
+    background: gold;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 700;
+    color: #660000;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ffd700;
+    transition: background 0.3s;
+  }
+  button.submit-btn:hover {
+    background: #ffdd00;
+  }
+  .message {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    text-align: center;
+    color: #ffb347;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Welcome</h2>
+  <div class="toggle-btns">
+    <button id="loginBtn" class="active">Login</button>
+    <button id="registerBtn">Register</button>
+  </div>
+
+  <!-- Login Form -->
+  <form id="loginForm" class="active">
+    <label for="loginEmail">Email or Phone Number</label>
+    <input type="text" id="loginEmail" placeholder="Enter Email or Phone" required />
+    
+    <label for="loginPassword">Password</label>
+    <input type="password" id="loginPassword" placeholder="Enter Password" required />
+    
+    <div class="security-verification" id="loginSecurity">
+      Verifying...
+    </div>
+    
+    <button type="submit" class="submit-btn">Login</button>
+    <div class="message" id="loginMessage"></div>
+  </form>
+
+  <!-- Register Form -->
+  <form id="registerForm">
+    <label for="regEmail">Email or Phone Number</label>
+    <input type="text" id="regEmail" placeholder="Enter Email or Phone" required />
+    
+    <label for="regPassword">Password</label>
+    <input type="password" id="regPassword" placeholder="Enter Password" required />
+    
+    <label for="regPassword2">Confirm Password</label>
+    <input type="password" id="regPassword2" placeholder="Confirm Password" required />
+    
+    <div class="invitation-code">Invitation code: <span id="invCode">BAAC3668</span></div>
+    
+    <div class="security-verification" id="registerSecurity">
+      Verifying...
+    </div>
+    
+    <button type="submit" class="submit-btn">Register</button>
+    <div class="message" id="registerMessage"></div>
+  </form>
+</div>
+
+<script>
+  // Toggle between login and register forms
+  const loginBtn = document.getElementById('loginBtn');
+  const registerBtn = document.getElementById('registerBtn');
+  const loginForm = document.getElementById('loginForm');
+  const registerForm = document.getElementById('registerForm');
+
+  loginBtn.addEventListener('click', () => {
+    loginBtn.classList.add('active');
+    registerBtn.classList.remove('active');
+    loginForm.classList.add('active');
+    registerForm.classList.remove('active');
+  });
+
+  registerBtn.addEventListener('click', () => {
+    registerBtn.classList.add('active');
+    loginBtn.classList.remove('active');
+    registerForm.classList.add('active');
+    loginForm.classList.remove('active');
+  });
+
+  // Simulate security verification delay
+  function simulateVerification(elementId) {
+    const el = document.getElementById(elementId);
+    el.textContent = 'Verifying...';
+    setTimeout(() => {
+      el.textContent = 'Verification complete';
+    }, 1500);
+  }
+  simulateVerification('loginSecurity');
+  simulateVerification('registerSecurity');
+
+  // LocalStorage keys
+  const USER_KEY = 'users';
+
+  // Helper to get users from localStorage
+  function getUsers() {
+    const users = localStorage.getItem(USER_KEY);
+    return users ? JSON.parse(users) : [];
+  }
+
+  // Helper to save users to localStorage
+  function saveUsers(users) {
+    localStorage.setItem(USER_KEY, JSON.stringify(users));
+  }
+
+  // Register form submit
+  registerForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass1 = document.getElementById('regPassword').value;
+    const pass2 = document.getElementById('regPassword2').value;
+    const msg = document.getElementById('registerMessage');
+
+    if (pass1 !== pass2) {
+      msg.textContent = 'Passwords do not match.';
+      msg.style.color = 'red';
+      return;
+    }
+
+    let users = getUsers();
+    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+      msg.textContent = 'User already exists.';
+      msg.style.color = 'red';
+      return;
+    }
+
+    users.push({ email, password: pass1 });
+    saveUsers(users);
+
+    msg.style.color = 'lightgreen';
+    msg.textContent = 'Registration successful! You can now login.';
+    registerForm.reset();
+  });
+
+  // Login form submit
+  loginForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const msg = document.getElementById('loginMessage');
+
+    let users = getUsers();
+    const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    if (user) {
+      msg.style.color = 'lightgreen';
+      msg.textContent = 'Login successful! Redirecting...';
+      // Save logged in user
+      localStorage.setItem('loggedInUser', email);
+      setTimeout(() => {
+        window.location.href = 'home.html'; // Redirect to home page
+      }, 1200);
+    } else {
+      msg.style.color = 'red';
+      msg.textContent = 'Invalid email or password.';
+    }
+  });
+</script>
+
+</body>
+</html>
