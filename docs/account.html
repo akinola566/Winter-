@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Account - Task Market</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f9d976, #f39f86);
+    color: #4b2e83;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* Container */
+  .container {
+    max-width: 480px;
+    width: 100%;
+    padding: 20px 15px 80px 15px;
+    position: relative;
+  }
+
+  /* Admin lock button top right */
+  #adminLockBtn {
+    position: fixed;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #b8860b;
+    cursor: pointer;
+    user-select: none;
+    z-index: 11000;
+    filter: drop-shadow(0 0 3px #ffd700cc);
+    transition: color 0.3s ease;
+  }
+  #adminLockBtn:hover {
+    color: #ffd700;
+  }
+
+  /* Available Balance box */
+  .balance-box {
+    background: linear-gradient(135deg, #b8860b, #ffd700);
+    border-radius: 25px;
+    padding: 20px 25px;
+    color: #3a1a6c;
+    font-weight: 700;
+    font-size: 1.3rem;
+    box-shadow: 0 0 30px #ffd700cc;
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+    animation: floatGlowing 3s ease-in-out infinite;
+  }
+  .balance-box .label {
+    font-size: 1rem;
+    user-select: none;
+    margin-bottom: 6px;
+    color: #fff8dc;
+    text-shadow: 0 0 8px #ffd700cc;
+  }
+  .balance-box .amount {
+    font-size: 2.8rem;
+    text-shadow: 0 0 12px #ffd700cc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+  }
+  .balance-box .amount .currency {
+    font-weight: 900;
+    font-size: 2.8rem;
+    color: #fff8dc;
+    text-shadow: 0 0 12px #ffd700cc;
+  }
+  .balance-box .bonus {
+    font-size: 1rem;
+    color: #fff8dc;
+    font-weight: 600;
+    margin-top: 6px;
+    user-select: none;
+    text-shadow: 0 0 6px #ffd700cc;
+  }
+  .balance-box .freq {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #fff8dccc;
+    user-select: none;
+  }
+
+  @keyframes floatGlowing {
+    0%, 100% { transform: translateY(0); box-shadow: 0 0 30px #ffd700cc; }
+    50% { transform: translateY(-8px); box-shadow: 0 0 45px #ffea00dd; }
+  }
+
+  /* Quick Withdraw Section */
+  h2.section-title {
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #b8860b;
+    text-shadow: 0 0 8px #ffd700cc;
+    user-select: none;
+  }
+
+  .withdraw-all-card {
+    background: rgba(255 215 0 / 0.3);
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    color: #3a1a6c;
+    font-weight: 700;
+    box-shadow: 0 0 20px #ffd700aa inset;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s ease;
+  }
+  .withdraw-all-card:hover {
+    background: rgba(255 215 0 / 0.6);
+  }
+  .withdraw-all-card .icon {
+    font-size: 1.8rem;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .withdraw-all-card .tag {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: #ffd700;
+    color: #3a1a6c;
+    font-weight: 900;
+    padding: 6px 14px;
+    border-radius: 12px;
+    user-select: none;
+  }
+  .withdraw-all-card p {
+    margin: 4px 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  /* Withdraw options grid */
+  .withdraw-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+    gap: 15px;
+    margin-bottom: 40px;
+  }
+
+  .withdraw-card {
+    background: #fff8f8;
+    border-radius: 20px;
+    padding: 14px 18px;
+    box-shadow: 0 0 12px rgba(184, 134, 11, 0.3);
+    cursor: pointer;
+    font-weight: 600;
+    user-select: none;
+    color: #4b2e83;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+  .withdraw-card:hover {
+    background: #fff0d1;
+    box-shadow: 0 0 15px #ffd700bb;
+  }
+  .withdraw-card.selected {
+    border: 3px solid #d22b2b;
+    background: #ffe6e6;
+    box-shadow: 0 0 20px #d22b2bcc;
+  }
+  .withdraw-card .amount {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .withdraw-card .details {
+    font-weight: 400;
+    font-size: 0.85rem;
+    color: #6a4c93;
+  }
+
+  /* Withdraw description popup */
+  #withdrawDescPopup {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: #fff8f8;
+    border-radius: 25px;
+    padding: 20px 25px;
+    box-shadow: 0 0 30px #b8860bcc;
+    max-width: 380px;
+    width: 90%;
+    color: #4b2e83;
+    font-weight: 600;
+    user-select: none;
+    z-index: 10000;
+    transition: transform 0.4s ease;
+  }
+  #withdrawDescPopup.visible {
+    transform: translateX(-50%) scale(1);
+  }
+  #withdrawDescPopup .desc-row {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+  }
+  #withdrawDescPopup .desc-label {
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  #withdrawDescPopup button#withdrawNowBtn {
+    margin-top: 12px;
+    width: 100%;
+    background: linear-gradient(90deg, #d22b2b, #ff4d4d);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 0;
+    color: #fff8dc;
+    font-weight: 900;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 0 20px #d22b2bcc;
+    transition: background 0.3s ease;
+  }
+  #withdrawDescPopup button#withdrawNowBtn:hover {
+    background: linear-gradient(90deg, #ff4d4d, #d22b2b);
+  }
+
+  /* Withdrawal Account section */
+  .withdraw-account {
+    background: linear-gradient(135deg, #b8860b, #ffd700);
+    border-radius: 25px;
+    padding: 20px 25px;
+    color: #3a1a6c;
+    font-weight: 700;
+    margin-bottom: 40px;
+    box-shadow: 0 0 30px #ffd700cc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .withdraw-account .info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .withdraw-account .account-number {
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+  .withdraw-account .account-name {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  .withdraw-account button.edit-btn {
+    background: transparent;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #3a1a6c;
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  .withdraw-account button.edit-btn:hover {
+    color: #ffd700;
+  }
+
+  /* Withdraw Now button */
+  #withdrawNowFooter {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(135deg, #b8860b, #ffd700);
+    padding: 14px 20px;
+    text-align: center;
+    box-shadow: 0 -2px 15px #b8860bcc;
+    user-select: none;
+    z-index: 11000;
+  }
+  #withdrawNowBtnFooter {
+    background: #d22b2b;
+    border: none;
+    border-radius: 35px;
+    padding: 14px 36px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: #fff8dc;
+    cursor: not-allowed;
+    box-shadow: 0 0 20px #d22b2bcc;
+    transition: background 0.3s ease;
+  }
+  #withdrawNowBtnFooter.enabled {
+    cursor: pointer;
+    background: linear-gradient(90deg, #d22b2b, #ff4d4d);
+  }
+  #withdrawNowBtnFooter.enabled:hover {
+    background: linear-gradient(90deg, #ff4d4d, #d22b2b);
+  }
+
+  /* Input details popup */
+  #inputDetailsPopup {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    background: #fff8f8;
+    padding: 20px 25px 40px 25px;
+    border-radius: 25px 25px 0 0;
+    box-shadow: 0 -4px 25px #b8860bcc;
+    max-height: 70vh;
+    overflow-y: auto;
+    z-index: 12000;
+    transform: translateY(100%);
+    transition: transform 0.4s ease;
+  }
+  #inputDetailsPopup.visible {
+    transform: translateY(0);
+  }
+  #inputDetailsPopup h3 {
+    font-weight: 900;
+    color: #b8860b;
+    margin-bottom: 18px;
+    user-select: none;
+  }
+  #inputDetailsPopup label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #4b2e83;
+  }
+  #inputDetailsPopup input, #inputDetailsPopup select {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1.5px solid #b8860b;
+    font-size: 1rem;
+    font-weight: 600;
+    outline: none;
+  }
+  #inputDetailsPopup input:focus, #inputDetailsPopup select:focus {
+    box-shadow: 0 0 12px #ffd700cc;
+    border-color: #ffd700;
+  }
+  #inputDetailsPopup button.save-btn {
+    background: linear-gradient(90deg, #b8860b, #ffd700);
+    border: none;
+    border-radius: 35px;
+    padding: 14px 36px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    color: #3a1a6c;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ffd700cc;
+    user-select: none;
+    transition: background 0.3s ease;
+    width: 100%;
+  }
+  #inputDetailsPopup button.save-btn:hover {
+    background: linear-gradient(90deg, #ffd700, #b8860b);
+  }
+
+  /* Popup overlay for messages */
+  #messagePopup {
+    position: fixed;
+    inset: 0;
+    background: rgba(184, 134, 11, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 13000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  #messagePopup.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #messagePopup .message-box {
+    background: #fff8f8;
+    padding: 25px 30px;
+    border-radius: 25px;
+    box-shadow: 0 0 30px #b8860bcc;
+    max-width: 320px;
+    text-align: center;
+    font-weight: 700;
+    color: #4b2e83;
+    user-select: none;
+  }
+  #messagePopup .message-box button {
+    margin-top: 20px;
+    background: #b8860b;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 25px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: #fff8dc;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ffd700cc;
+    transition: background 0.3s ease;
+  }
+  #messagePopup .message-box button:hover {
+    background: #ffd700;
+    color: #3a1a6c;
+  }
+
+  /* Admin panel popup */
+  #adminPanelPopup {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: #fff8f8;
+    border-radius: 25px;
+    padding: 25px 30px;
+    box-shadow: 0 0 40px #b8860bcc;
+    max-width: 420px;
+    width: 90%;
+    color: #4b2e83;
+    font-weight: 600;
+    z-index: 14000;
+    transition: transform 0.4s ease;
+    user-select: none;
+  }
+  #adminPanelPopup.visible {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  #adminPanelPopup h3 {
+    font-weight: 900;
+    margin-bottom: 18px;
+    color: #b8860b;
+  }
+  #adminPanelPopup label {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 6px;
+  }
+  #adminPanelPopup input[type="text"], #adminPanelPopup input[type="number"] {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    border: 1.5px solid #b8860b;
+    font-size: 1rem;
+    outline: none;
+  }
+  #adminPanelPopup input[type="text"]:focus, #adminPanelPopup input[type="number"]:focus {
+    box-shadow: 0 0 12px #ffd700cc;
+    border-color: #ffd700;
+  }
+  #adminPanelPopup button {
+    background: linear-gradient(90deg, #b8860b, #ffd700);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 28px;
+    font-weight: 900;
+    font-size: 1.1rem;
+    color: #3a1a6c;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ffd700cc;
+    user-select: none;
+    transition: background 0.3s ease;
+    margin-right: 10px;
+  }
+  #adminPanelPopup button:hover {
+    background: linear-gradient(90deg, #ffd700, #b8860b);
+  }
+  #adminPanelPopup .btn-group {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+  #adminPanelPopup .ban-status {
+    margin-top: 10px;
+    font-weight: 700;
+    color: #d22b2b;
+    user-select: none;
+  }
+
+  /* Scrollbar */
+  #inputDetailsPopup::-webkit-scrollbar,
+  #adminPanelPopup::-webkit-scrollbar {
+    width: 6px;
+  }
+  #inputDetailsPopup::-webkit-scrollbar-thumb,
+  #adminPanelPopup::-webkit-scrollbar-thumb {
+    background: #b8860b;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .balance-box {
+      font-size: 1.1rem;
+    }
+    .balance-box .amount {
+      font-size: 2rem;
+    }
+    .withdraw-card {
+      font-size: 0.9rem;
+    }
+    #withdrawDescPopup {
+      max-width: 95vw;
+    }
+    #inputDetailsPopup {
+      max-height: 80vh;
+      padding: 15px 18px 35px 18px;
+    }
+    #adminPanelPopup {
+      width: 95vw;
+      padding: 20px 18px;
+    }
+  }
+
+  /* Screen blocked for banned user */
+  #bannedOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(210, 0, 108, 0.9);
+    color: white;
+    font-weight: 900;
+    font-size: 1.5rem;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 15000;
+    text-align: center;
+    padding: 20px;
+  }
+  #bannedOverlay.visible {
+    display: flex;
+  }
+</style>
+</head>
+<body>
+
+<button id="adminLockBtn" aria-label="Admin panel access" title="Admin panel">&#128274;</button>
+
+<div class="container" role="main" aria-label="Account and withdrawals">
+
+  <div class="balance-box" aria-live="polite" aria-atomic="true" aria-label="Available balance including bonus">
+    <div class="label">Available Balance</div>
+    <div class="amount"><span class="currency">₦</span><span id="balanceAmount">0.0</span></div>
+    <div class="bonus">+ ₦500 Bonus</div>
+    <div class="freq" aria-live="polite" aria-atomic="true">Daily withdrawal frequency: <span id="withdrawFreq">0</span> times</div>
+  </div>
+
+  <h2 class="section-title">Quick Withdraw</h2>
+
+  <div class="withdraw-all-card" id="withdrawAllCard" tabindex="0" role="button" aria-pressed="false" aria-label="Withdraw all available balance">
+    <span class="icon">💰</span>
+    Withdraw All
+    <div class="tag">All</div>
+    <p>Exceeding 15000 Can withdraw all<br>No extra handling fee, withdraw all cash to your bank account</p>
+  </div>
+
+  <div class="withdraw-options" role="list" aria-label="Withdrawal amounts">
+    <div class="withdraw-card" data-amount="7875" data-receive="7500" data-fee="375" role="listitem" tabindex="0" aria-label="Withdraw seven thousand eight hundred seventy five naira, receive seven thousand five hundred, fee three hundred seventy five naira">
+      <div class="amount">₦ 7875</div>
+      <div class="details">
+        You receive: ₦7500<br />
+        Fee: ₦375
+      </div>
+    </div>
+    <div class="withdraw-card" data-amount="4725" data-receive="4500" data-fee="225" role="listitem" tabindex="0" aria-label="Withdraw four thousand seven hundred twenty five naira, receive four thousand five hundred, fee two hundred twenty five naira">
+      <div class="amount">₦ 4725</div>
+      <div class="details">
+        You receive: ₦4500<br />
+        Fee: ₦225
+      </div>
+    </div>
+    <div class="withdraw-card" data-amount="3300" data-receive="3000" data-fee="300" role="listitem" tabindex="0" aria-label="Withdraw three thousand three hundred naira, receive three thousand, fee three hundred naira">
+      <div class="amount">₦ 3300</div>
+      <div class="details">
+        You receive: ₦3000<br />
+        Fee: ₦300
+      </div>
+    </div>
+  </div>
+
+  <h2 class="section-title">Withdrawal Account</h2>
+
+  <div class="withdraw-account" aria-live="polite" aria-atomic="true" aria-label="Withdrawal account details">
+    <div class="info" id="accountInfo">
+      <div class="account-number" id="accountNumberDisplay">No account linked</div>
+      <div class="account-name" id="accountNameDisplay"></div>
+    </div>
+    <button class="edit-btn" id="editAccountBtn" aria-label="Edit withdrawal account details">Edit</button>
+  </div>
+
+</div>
+
+<div id="withdrawDescPopup" role="dialog" aria-modal="true" aria-labelledby="withdrawDescTitle" aria-describedby="withdrawDescDetails" tabindex="-1">
+  <div id="withdrawDescTitle" style="font-weight:900; font-size:1.3rem; margin-bottom:8px;">Withdrawal Details</div>
+  <div id="withdrawDescDetails">
+    <div class="desc-row"><span class="desc-label">Amount:</span> <span id="descAmount">₦0</span></div>
+    <div class="desc-row"><span class="desc-label">Charges:</span> <span id="descCharges">₦0</span></div>
+  </div>
+  <button id="withdrawNowBtn" aria-label="Confirm withdrawal">Withdraw</button>
+</div>
+
+<div id="inputDetailsPopup" role="dialog" aria-modal="true" aria-labelledby="inputDetailsTitle" tabindex="-1" aria-hidden="true">
+  <h3 id="inputDetailsTitle">Enter Withdrawal Account Details</h3>
+  <form id="accountForm" novalidate>
+    <label for="bankSelect">Select Bank</label>
+    <select id="bankSelect" required aria-required="true">
+      <option value="" disabled selected>Select Bank</option>
+      <option value="OPAY(PAYCOM)">OPAY(PAYCOM)</option>
+      <option value="GTBank">GTBank</option>
+      <option value="Access Bank">Access Bank</option>
+      <option value="Zenith Bank">Zenith Bank</option>
+      <option value="First Bank">First Bank</option>
+      <option value="UBA">UBA</option>
+      <!-- Add more banks as needed -->
+    </select>
+
+    <label for="accountNumberInput">Account Number</label>
+    <input type="text" id="accountNumberInput" placeholder="Enter account number" required aria-required="true" pattern="^\d{10,}$" />
+
+    <label for="accountNameInput">Account Holder Name</label>
+    <input type="text" id="accountNameInput" placeholder="Enter account holder name" required aria-required="true" />
+
+    <button type="submit" class="save-btn" aria-label="Save account details">Save</button>
+  </form>
+</div>
+
+<div id="messagePopup" role="alert" aria-live="assertive">
+  <div class="message-box">
+    <div id="messageText"></div>
+    <button id="messageCloseBtn" aria-label="Close message">OK</button>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div id="adminPanelPopup" role="dialog" aria-modal="true" aria-labelledby="adminPanelTitle" tabindex="-1" aria-hidden="true">
+  <h3 id="adminPanelTitle">Admin Panel</h3>
+  <label for="ipDisplay">User IP Address</label>
+  <input type="text" id="ipDisplay" readonly aria-readonly="true" />
+
+  <label for="balanceEditInput">User Balance</label>
+  <input type="number" id="balanceEditInput" min="0" step="0.01" />
+
+  <div class="btn-group">
+    <button id="saveBalanceBtn" aria-label="Save balance">Save</button>
+    <button id="banUserBtn" aria-label="Ban user">Ban User</button>
+    <button id="unbanUserBtn" aria-label="Unban user" style="display:none;">Unban User</button>
+    <button id="closeAdminBtn" aria-label="Close admin panel">Close</button>
+  </div>
+  <div class="ban-status" id="banStatusMsg" aria-live="polite"></div>
+</div>
+
+<div id="bannedOverlay" role="alertdialog" aria-modal="true" aria-labelledby="bannedTitle" aria-describedby="bannedDesc">
+  <div>
+    <h2 id="bannedTitle">Access Denied</h2>
+    <p id="bannedDesc">Your IP has been banned. You cannot access this page.</p>
+  </div>
+</div>
+
+<script>
+  // Simulated user data (would come from backend or localStorage)
+  let userData = {
+    balance: 338.7,
+    bonus: 500,
+    withdrawFrequency: 1,
+    account: null, // { bank: '', number: '', name: '' }
+    banned: false,
+  };
+
+  // Selected withdrawal option
+  let selectedWithdrawOption = null;
+
+  // DOM Elements
+  const balanceAmountEl = document.getElementById('balanceAmount');
+  const withdrawFreqEl = document.getElementById('withdrawFreq');
+  const withdrawCards = document.querySelectorAll('.withdraw-card');
+  const withdrawAllCard = document.getElementById('withdrawAllCard');
+  const withdrawDescPopup = document.getElementById('withdrawDescPopup');
+  const descAmountEl = document.getElementById('descAmount');
+  const descChargesEl = document.getElementById('descCharges');
+  const withdrawNowBtn = document.getElementById('withdrawNowBtn');
+  const accountInfo = document.getElementById('accountInfo');
+  const accountNumberDisplay = document.getElementById('accountNumberDisplay');
+  const accountNameDisplay = document.getElementById('accountNameDisplay');
+  const editAccountBtn = document.getElementById('editAccountBtn');
+  const inputDetailsPopup = document.getElementById('inputDetailsPopup');
+  const accountForm = document.getElementById('accountForm');
+  const bankSelect = document.getElementById('bankSelect');
+  const accountNumberInput = document.getElementById('accountNumberInput');
+  const accountNameInput = document.getElementById('accountNameInput');
+  const messagePopup = document.getElementById('messagePopup');
+  const messageText = document.getElementById('messageText');
+  const messageCloseBtn = document.getElementById('messageCloseBtn');
+  const withdrawNowBtnFooter = document.getElementById('withdrawNowBtnFooter');
+  const container = document.querySelector('.container');
+  const adminLockBtn = document.getElementById('adminLockBtn');
+  const adminPanelPopup = document.getElementById('adminPanelPopup');
+  const ipDisplay = document.getElementById('ipDisplay');
+  const balanceEditInput = document.getElementById('balanceEditInput');
+  const saveBalanceBtn = document.getElementById('saveBalanceBtn');
+  const banUserBtn = document.getElementById('banUserBtn');
+  const unbanUserBtn = document.getElementById('unbanUserBtn');
+  const closeAdminBtn = document.getElementById('closeAdminBtn');
+  const banStatusMsg = document.getElementById('banStatusMsg');
+  const bannedOverlay = document.getElementById('bannedOverlay');
+
+  // Utility: show message popup
+  function showMessage(msg) {
+    messageText.textContent = msg;
+    messagePopup.classList.add('visible');
+    messagePopup.focus();
+  }
+  messageCloseBtn.addEventListener('click', () => {
+    messagePopup.classList.remove('visible');
+  });
+
+  // Update balance display with bonus
+  function updateBalanceDisplay() {
+    const total = (userData.balance + userData.bonus).toFixed(1);
+    balanceAmountEl.textContent = total;
+    withdrawFreqEl.textContent = userData.withdrawFrequency;
+  }
+
+  // Update account display
+  function updateAccountDisplay() {
+    if (userData.account) {
+      accountNumberDisplay.textContent = userData.account.number;
+      accountNameDisplay.textContent = userData.account.name;
+    } else {
+      accountNumberDisplay.textContent = 'No account linked';
+      accountNameDisplay.textContent = '';
+    }
+  }
+
+  // Clear withdraw selection
+  function clearWithdrawSelection() {
+    selectedWithdrawOption = null;
+    withdrawCards.forEach(card => card.classList.remove('selected'));
+    withdrawAllCard.setAttribute('aria-pressed', 'false');
+    withdrawDescPopup.classList.remove('visible');
+    withdrawNowBtnFooter.classList.remove('enabled');
+    withdrawNowBtnFooter.disabled = true;
+  }
+
+  // Select withdraw card
+  function selectWithdrawCard(card) {
+    clearWithdrawSelection();
+    selectedWithdrawOption = {
+      amount: parseFloat(card.dataset.amount),
+      receive: parseFloat(card.dataset.receive),
+      fee: parseFloat(card.dataset.fee)
+    };
+    card.classList.add('selected');
+    showWithdrawDesc(selectedWithdrawOption.amount, selectedWithdrawOption.fee);
+    withdrawNowBtnFooter.classList.add('enabled');
+    withdrawNowBtnFooter.disabled = false;
+  }
+
+  // Select withdraw all
+  function selectWithdrawAll() {
+    clearWithdrawSelection();
+    selectedWithdrawOption = {
+      amount: userData.balance + userData.bonus,
+      receive: userData.balance + userData.bonus,
+      fee: 0
+    };
+    withdrawAllCard.setAttribute('aria-pressed', 'true');
+    showWithdrawDesc(selectedWithdrawOption.amount, 0);
+    withdrawNowBtnFooter.classList.add('enabled');
+    withdrawNowBtnFooter.disabled = false;
+  }
+
+  // Show withdrawal description popup
+  function showWithdrawDesc(amount, fee) {
+    descAmountEl.textContent = `₦${amount.toFixed(2)}`;
+    descChargesEl.textContent = `₦${fee.toFixed(2)}`;
+    withdrawDescPopup.classList.add('visible');
+    withdrawDescPopup.focus();
+  }
+
+  // Hide withdrawal description popup
+  function hideWithdrawDesc() {
+    withdrawDescPopup.classList.remove('visible');
+  }
+
+  // Check if user has enough balance for selected withdrawal
+  function canWithdraw() {
+    if (!selectedWithdrawOption) return false;
+    return (userData.balance + userData.bonus) >= selectedWithdrawOption.amount;
+  }
+
+  // Withdraw Now button logic
+  function performWithdraw() {
+    if (!selectedWithdrawOption) {
+      showMessage('Please select a withdrawal amount.');
+      return;
+    }
+    if (!canWithdraw()) {
+      showMessage('You have not reached the minimum withdrawal amount.');
+      return;
+    }
+    if (!userData.account) {
+      showMessage('Please add withdrawal account details first.');
+      openAccountForm();
+      return;
+    }
+
+    // Show confirmation popup with amount and charges
+    showWithdrawDesc(selectedWithdrawOption.amount, selectedWithdrawOption.fee);
+  }
+
+  // Withdraw Now button click (popup confirm)
+  withdrawNowBtn.addEventListener('click', () => {
+    // Simulate withdrawal process
+    const totalDeduct = selectedWithdrawOption.amount;
+    if ((userData.balance + userData.bonus) < totalDeduct) {
+      showMessage('Insufficient balance for withdrawal.');
+      return;
+    }
+
+    // Deduct from balance (bonus deducted first)
+    let amountLeft = totalDeduct;
+    if (userData.bonus >= amountLeft) {
+      userData.bonus -= amountLeft;
+      amountLeft = 0;
+    } else {
+      amountLeft -= userData.bonus;
+      userData.bonus = 0;
+      userData.balance -= amountLeft;
+    }
+
+    // Increase withdrawal frequency
+    userData.withdrawFrequency++;
+
+    updateBalanceDisplay();
+    updateAccountDisplay();
+    clearWithdrawSelection();
+    hideWithdrawDesc();
+    showMessage(`Withdrawal of ₦${totalDeduct.toFixed(2)} successful!`);
+
+  });
+
+  // Withdraw card click handlers
+  withdrawCards.forEach(card => {
+    card.addEventListener('click', () => {
+      selectWithdrawCard(card);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectWithdrawCard(card);
+      }
+    });
+  });
+
+  // Withdraw All card click handler
+  withdrawAllCard.addEventListener('click', () => {
+    selectWithdrawAll();
+  });
+  withdrawAllCard.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      selectWithdrawAll();
+    }
+  });
+
+    // Withdraw Now footer button
+  const withdrawNowBtnFooter = document.createElement('button');
+  withdrawNowBtnFooter.id = 'withdrawNowBtnFooter';
+  withdrawNowBtnFooter.textContent = 'Withdraw Now';
+  withdrawNowBtnFooter.disabled = true;
+  withdrawNowBtnFooter.style.position = 'fixed';
+  withdrawNowBtnFooter.style.bottom = '20px';
+  withdrawNowBtnFooter.style.left = '50%';
+  withdrawNowBtnFooter.style.transform = 'translateX(-50%)';
+  withdrawNowBtnFooter.style.zIndex = '12000';
+  withdrawNowBtnFooter.style.padding = '14px 36px';
+  withdrawNowBtnFooter.style.borderRadius = '35px';
+  withdrawNowBtnFooter.style.fontWeight = '900';
+  withdrawNowBtnFooter.style.fontSize = '1.3rem';
+  withdrawNowBtnFooter.style.color = '#fff8dc';
+  withdrawNowBtnFooter.style.background = '#d22b2b';
+  withdrawNowBtnFooter.style.border = 'none';
+  withdrawNowBtnFooter.style.cursor = 'not-allowed';
+  withdrawNowBtnFooter.style.boxShadow = '0 0 20px #d22b2bcc';
+  document.body.appendChild(withdrawNowBtnFooter);
+
+  function updateWithdrawNowBtn() {
+    if (selectedWithdrawOption && userData.account && canWithdraw()) {
+      withdrawNowBtnFooter.disabled = false;
+      withdrawNowBtnFooter.classList.add('enabled');
+      withdrawNowBtnFooter.style.cursor = 'pointer';
+    } else {
+      withdrawNowBtnFooter.disabled = true;
+      withdrawNowBtnFooter.classList.remove('enabled');
+      withdrawNowBtnFooter.style.cursor = 'not-allowed';
+    }
+  }
+
+  withdrawNowBtnFooter.addEventListener('click', () => {
+    if (withdrawNowBtnFooter.disabled) return;
+    // Show confirmation popup with amount and charges
+    showWithdrawDesc(selectedWithdrawOption.amount, selectedWithdrawOption.fee);
+  });
+
+  // Update withdraw now button state whenever selection or account changes
+  function refreshUI() {
+    updateBalanceDisplay();
+    updateAccountDisplay();
+    updateWithdrawNowBtn();
+  }
+
+  // Open account form popup
+  function openAccountForm() {
+    inputDetailsPopup.classList.add('visible');
+    inputDetailsPopup.setAttribute('aria-hidden', 'false');
+    // Pre-fill if account exists
+    if (userData.account) {
+      bankSelect.value = userData.account.bank;
+      accountNumberInput.value = userData.account.number;
+      accountNameInput.value = userData.account.name;
+    } else {
+      bankSelect.value = '';
+      accountNumberInput.value = '';
+      accountNameInput.value = '';
+    }
+    bankSelect.focus();
+  }
+
+  // Close account form popup
+  function closeAccountForm() {
+    inputDetailsPopup.classList.remove('visible');
+    inputDetailsPopup.setAttribute('aria-hidden', 'true');
+  }
+
+  // Edit account button click
+  editAccountBtn.addEventListener('click', () => {
+    openAccountForm();
+  });
+
+  // Account form submit handler
+  accountForm.addEventListener('submit', e => {
+    e.preventDefault();
+    // Validate inputs
+    if (!bankSelect.value) {
+      showMessage('Please select a bank.');
+      bankSelect.focus();
+      return;
+    }
+    if (!accountNumberInput.value.match(/^\d{10,}$/)) {
+      showMessage('Please enter a valid account number (at least 10 digits).');
+      accountNumberInput.focus();
+      return;
+    }
+    if (!accountNameInput.value.trim()) {
+      showMessage('Please enter the account holder name.');
+      accountNameInput.focus();
+      return;
+    }
+    // Save account details
+    userData.account = {
+      bank: bankSelect.value,
+      number: accountNumberInput.value.trim(),
+      name: accountNameInput.value.trim()
+    };
+    closeAccountForm();
+    refreshUI();
+    showMessage('Account details saved successfully.');
+  });
+
+  // Withdraw Now popup close on clicking outside or escape
+  withdrawDescPopup.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      hideWithdrawDesc();
+    }
+  });
+  withdrawDescPopup.addEventListener('click', e => {
+    if (e.target === withdrawDescPopup) {
+      hideWithdrawDesc();
+    }
+  });
+
+  // Hide withdraw desc popup on clicking outside or ESC (optional)
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      hideWithdrawDesc();
+      closeAccountForm();
+      closeAdminPanel();
+      closeMessagePopup();
+    }
+  });
+
+  // Admin panel logic
+  function closeAdminPanel() {
+    adminPanelPopup.classList.remove('visible');
+    adminPanelPopup.setAttribute('aria-hidden', 'true');
+  }
+  function openAdminPanel() {
+    adminPanelPopup.classList.add('visible');
+    adminPanelPopup.setAttribute('aria-hidden', 'false');
+    balanceEditInput.value = userData.balance.toFixed(2);
+    banStatusMsg.textContent = userData.banned ? 'User is currently banned.' : 'User is not banned.';
+    banUserBtn.style.display = userData.banned ? 'none' : 'inline-block';
+    unbanUserBtn.style.display = userData.banned ? 'inline-block' : 'none';
+    balanceEditInput.focus();
+  }
+
+  // Get user IP address via external service (simple)
+  async function fetchUserIP() {
+    try {
+      const res = await fetch('https://api.ipify.org?format=json');
+      const data = await res.json();
+      ipDisplay.value = data.ip || 'Unknown';
+    } catch (err) {
+      ipDisplay.value = 'Unknown';
+    }
+  }
+
+  // Admin lock button click - prompt password
+  adminLockBtn.addEventListener('click', () => {
+    const pwd = prompt('Enter admin password:');
+    if (pwd === '@Favour11') {
+      fetchUserIP().then(() => {
+        openAdminPanel();
+      });
+    } else if (pwd !== null) {
+      showMessage('Incorrect password.');
+    }
+  });
+
+  // Save balance button in admin panel
+  saveBalanceBtn.addEventListener('click', () => {
+    const newBalance = parseFloat(balanceEditInput.value);
+    if (isNaN(newBalance) || newBalance < 0) {
+      showMessage('Please enter a valid positive balance.');
+      return;
+    }
+    userData.balance = newBalance;
+    refreshUI();
+    showMessage('Balance updated successfully.');
+  });
+
+  // Ban user button
+  banUserBtn.addEventListener('click', () => {
+    userData.banned = true;
+    banStatusMsg.textContent = 'User is currently banned.';
+    banUserBtn.style.display = 'none';
+    unbanUserBtn.style.display = 'inline-block';
+    showBannedOverlay();
+  });
+
+  // Unban user button
+  unbanUserBtn.addEventListener('click', () => {
+    userData.banned = false;
+    banStatusMsg.textContent = 'User is not banned.';
+    banUserBtn.style.display = 'inline-block';
+    unbanUserBtn.style.display = 'none';
+    hideBannedOverlay();
+  });
+
+  // Close admin panel button
+  closeAdminBtn.addEventListener('click', () => {
+    closeAdminPanel();
+  });
+
+  // Show banned overlay
+  function showBannedOverlay() {
+    bannedOverlay.classList.add('visible');
+  }
+  // Hide banned overlay
+  function hideBannedOverlay() {
+    bannedOverlay.classList.remove('visible');
+  }
+
+  // On page load, check if banned
+  window.addEventListener('load', () => {
+    refreshUI();
+    if (userData.banned) {
+      showBannedOverlay();
+    }
+  });
+
+  // Close message popup helper
+  function closeMessagePopup() {
+    messagePopup.classList.remove('visible');
+  }
+
+  // Accessibility: focus trap for modals can be added if needed
+
+</script>
+
+</body>
+</html>
