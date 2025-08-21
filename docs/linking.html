@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Phone Login - Task Market</title>
+<style>
+  /* Reset */
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f9d976, #f39f86); /* warm gold gradient */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-x: hidden;
+    color: #4b2e83; /* indigo */
+  }
+
+  /* Container */
+  .container {
+    max-width: 480px;
+    width: 100%;
+    padding: 20px 15px 40px 15px;
+    text-align: center;
+    position: relative;
+  }
+
+  /* Heading */
+  h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+    color: #b8860b;
+    text-shadow: 0 0 8px #ffd700aa;
+    user-select: none;
+  }
+  .subheading {
+    font-size: 1.1rem;
+    color: #b8860bdd;
+    margin-bottom: 20px;
+    user-select: none;
+  }
+
+  /* Video placeholder */
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    height: 250px;
+    margin: 0 auto 24px auto;
+    border-radius: 20px;
+    box-shadow: 0 0 25px #b8860b88;
+    overflow: hidden;
+    background: #000;
+  }
+  video, .video-placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+  /* If no video, show placeholder */
+  .video-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #b8860b;
+    font-weight: 700;
+    font-size: 1.3rem;
+    user-select: none;
+  }
+
+  /* Phone Login button */
+  #phoneLoginBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(90deg, #b8860b, #ffd700);
+    border-radius: 35px;
+    padding: 14px 32px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: #3a1a6c;
+    cursor: pointer;
+    box-shadow: 0 0 20px #ffd700cc;
+    user-select: none;
+    transition: background 0.4s ease, box-shadow 0.4s ease;
+    border: none;
+    margin: 0 auto;
+  }
+  #phoneLoginBtn:hover {
+    background: linear-gradient(90deg, #ffd700, #b8860b);
+    box-shadow: 0 0 35px #ffea00;
+  }
+  #phoneLoginBtn svg {
+    width: 24px;
+    height: 24px;
+    fill: #3a1a6c;
+  }
+
+  /* Floating phone login form container */
+  #phoneLoginForm {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 90%;
+    max-width: 460px;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    border-radius: 25px;
+    box-shadow: 0 0 35px #ffd700cc;
+    padding: 25px 30px 30px 30px;
+    color: #fff8dc;
+    font-weight: 600;
+    user-select: none;
+    z-index: 9999;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    max-height: 90vh;
+  }
+  #phoneLoginForm.visible {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Rope animation container */
+  #ropeWrapper {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    height: 50px;
+    pointer-events: none;
+    user-select: none;
+    animation: ropeSwing 3s ease-in-out infinite alternate;
+  }
+  @keyframes ropeSwing {
+    0% { transform: translateX(-50%) rotate(-4deg);}
+    100% { transform: translateX(-50%) rotate(4deg);}
+  }
+  /* Rope SVG style */
+  #ropeWrapper svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 3px #ffd700cc);
+  }
+
+  /* Close button */
+  #closeFormBtn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 1.8rem;
+    color: #fff8dc;
+    cursor: pointer;
+    font-weight: 900;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  #closeFormBtn:hover {
+    color: #ffd700;
+  }
+
+  /* Form heading */
+  #phoneLoginForm h2 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #ffd700aa;
+  }
+
+  /* Input group */
+  .input-group {
+    display: flex;
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+  .country-code {
+    background: #fff8dc;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #b8860b;
+    user-select: none;
+    flex-shrink: 0;
+    border: none;
+  }
+  #phoneNumber {
+    flex-grow: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+  }
+  #phoneNumber:focus {
+    box-shadow: 0 0 8px #ffd700cc;
+  }
+  #getKeyBtn {
+    background: #b8860b;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 22px;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff8dc;
+    cursor: pointer;
+    box-shadow: 0 0 15px #ffd700cc;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+  }
+  #getKeyBtn:hover:not(:disabled) {
+    background: #ffd700;
+    color: #3a1a6c;
+    box-shadow: 0 0 25px #ffea00;
+  }
+  #getKeyBtn:disabled {
+    background: #7a5e00;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Instructions */
+  .instructions {
+    text-align: left;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    line-height: 1.3;
+    color: #fff8dccc;
+  }
+  .instructions strong {
+    color: #ffd700;
+  }
+  .instructions svg {
+    vertical-align: middle;
+    width: 18px;
+    height: 18px;
+    margin: 0 4px;
+    fill: #00ff00;
+  }
+
+  /* Verification code boxes */
+  .verification-code {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 30px;
+  }
+  .verification-code input {
+    width: 30px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    color: #b8860b;
+    background: #fff8dc;
+    box-shadow: 0 0 8px #ffd700cc inset;
+    user-select: text;
+  }
+  .verification-code input:focus {
+    box-shadow: 0 0 15px #ffd700cc inset;
+  }
+
+  /* Login instructions box */
+  .login-instructions {
+    background: rgba(255 215 0 / 0.15);
+    border-radius: 18px;
+    padding: 16px 18px;
+    color: #3a1a6c;
+    font-weight: 600;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    user-select: none;
+  }
+  .login-instructions ol {
+    padding-left: 18px;
+    margin: 0;
+  }
+  .login-instructions li {
+    margin-bottom: 8px;
+  }
+  .login-instructions strong {
+    color: #b8860b;
+  }
+
+  /* Scrollbar for form */
+  #phoneLoginForm::-webkit-scrollbar {
+    width: 6px;
+  }
+  #phoneLoginForm::-webkit-scrollbar-thumb {
+    background: #b8860b;
+    border-radius: 3px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    h1 {
+      font-size: 1.8rem;
+    }
+    .subheading {
+      font-size: 1rem;
+    }
+    #phoneLoginBtn {
+      font-size: 1rem;
+      padding: 12px 24px;
+    }
+    #phoneLoginForm {
+      max-width: 95vw;
+      padding: 20px 18px 25px 18px;
+    }
+    #phoneLoginForm h2 {
+      font-size: 1.5rem;
+    }
+    .input-group {
+      flex-direction: column;
+      gap: 12px;
+    }
+    #getKeyBtn {
+      width: 100%;
+      padding: 12px 0;
+    }
+    .verification-code input {
+      width: 28px;
+      height: 38px;
+      font-size: 1.2rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" role="main" aria-label="Phone Login">
+
+  <h1>Scan to Login</h1>
+  <div class="subheading">Quick and secure login</div>
+
+  <div class="video-wrapper" aria-label="Login video demonstration">
+    <!-- Example video src, replace with your actual video -->
+    <video controls preload="metadata" poster="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" aria-describedby="videoDesc">
+      <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" type="video/webm">
+      Your browser does not support the video tag.
+    </video>
+    <div id="videoDesc" class="sr-only">A video demonstrating how to login securely by scanning QR code or phone login.</div>
+  </div>
+
+  <button id="phoneLoginBtn" aria-haspopup="dialog" aria-controls="phoneLoginForm" aria-expanded="false" aria-label="Open phone login form">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2C5.9 2 5 2.9 5 4v16c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H7zm0 2h8v16H7V4z"/></svg>
+    Phone Login
+  </button>
+
+</div>
+
+<!-- Floating phone login form -->
+<div id="phoneLoginForm" role="dialog" aria-modal="true" aria-labelledby="formTitle" aria-describedby="formDesc" tabindex="-1" aria-hidden="true" >
+  <div id="ropeWrapper" aria-hidden="true" title="Decorative rope animation">
+    <!-- Simple rope SVG -->
+    <svg viewBox="0 0 280 50" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" >
+      <path d="M5 45 Q40 5 75 45 T145 45 T215 45 T280 45" stroke="#b8860b" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <button id="closeFormBtn" aria-label="Close phone login form">&times;</button>
+  <h2 id="formTitle">Bind account</h2>
+
+  <form id="bindForm" novalidate>
+    <label for="phoneNumber" class="sr-only">WhatsApp phone number</label>
+    <div class="input-group">
+      <input type="text" class="country-code" value="+234" readonly aria-readonly="true" />
+      <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Enter your WhatsApp phone number" inputmode="tel" pattern="[0-9]{7,15}" autocomplete="tel" required aria-required="true" />
+      <button type="submit" id="getKeyBtn" aria-label="Get verification key">Get key</button>
+    </div>
+  </form>
+
+  <div class="instructions" id="formDesc">
+    <p>1. Open <strong>WhatsApp</strong> on your phone, click the link with phone number, and enter this code on your phone!</p>
+  </div>
+
+  <div class="verification-code" aria-label="Enter verification code" role="group">
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 1" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 2" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 3" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 4" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 5" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 6" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 7" />
+    <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" aria-label="Verification code digit 8" />
+  </div>
+
+  <div class="login-instructions" tabindex="0">
+    <strong>Login to WhatsApp</strong>
+    <ol>
+      <li>Open <strong>WhatsApp</strong></li>
+      <li>Tap <strong>Settings</strong> ⚙️ (on iPhone) or <strong>Menu</strong> ☰ (on Android)</li>
+      <li>Tap <strong>Linked Devices</strong> then <strong>Link a Device</strong></li>
+      <li>Point your phone at this screen and scan the QR code</li>
+      <li>Switch to phone number association, enter verification code <strong>77777777</strong></li>
+      <li>While the conversation is loading, keep both apps open and connected to the network (Wi-Fi, 4G or faster)</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+  const phoneLoginBtn = document.getElementById('phoneLoginBtn');
+  const phoneLoginForm = document.getElementById('phoneLoginForm');
+  const closeFormBtn = document.getElementById('closeFormBtn');
+  const getKeyBtn = document.getElementById('getKeyBtn');
+  const phoneNumberInput = document.getElementById('phoneNumber');
+  const verificationInputs = document.querySelectorAll('.verification-code input');
+  const bindForm = document.getElementById('bindForm');
+
+  // Open form
+  phoneLoginBtn.addEventListener('click', () => {
+    phoneLoginForm.classList.add('visible');
+    phoneLoginForm.setAttribute('aria-hidden', 'false');
+    phoneLoginBtn.setAttribute('aria-expanded', 'true');
+    phoneNumberInput.focus();
+    document.body.style.overflow = 'hidden'; // prevent background scroll
+  });
+
+  // Close form
+  closeFormBtn.addEventListener('click', () => {
+    phoneLoginForm.classList.remove('visible');
+    phoneLoginForm.setAttribute('aria-hidden', 'true');
+    phoneLoginBtn.setAttribute('aria-expanded', 'false');
+    phoneLoginBtn.focus();
+    document.body.style.overflow = ''; // restore scroll
+  });
+
+  // Allow ESC key to close form
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && phoneLoginForm.classList.contains('visible')) {
+      closeFormBtn.click();
+    }
+  });
+
+  // Verification code input auto-focus next field
+  verificationInputs.forEach((input, idx) => {
+    input.addEventListener('input', () => {
+      if (input.value.length === 1 && idx < verificationInputs.length - 1) {
+        verificationInputs[idx + 1].focus();
+      }
+    });
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && input.value === '' && idx > 0) {
+        verificationInputs[idx - 1].focus();
+      }
+    });
+  });
+
+  // Get key button form submission placeholder
+  bindForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const phone = phoneNumberInput.value.trim();
+    if (!phone.match(/^\d{7,15}$/)) {
+      alert('Please enter a valid WhatsApp phone number (7-15 digits)');
+      phoneNumberInput.focus();
+      return;
+    }
+    getKeyBtn.disabled = true;
+    getKeyBtn.textContent = 'Sending...';
+    // Simulate sending key (replace with real API call)
+    setTimeout(() => {
+      alert(`Verification key sent to +234${phone}`);
+      getKeyBtn.disabled = false;
+      getKeyBtn.textContent = 'Get key';
+      verificationInputs[0].focus();
+    }, 1500);
+  });
+</script>
+
+</body>
+</html>
