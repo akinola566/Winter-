@@ -13,7 +13,7 @@
     margin: 0; padding: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #f8d7e3; /* light pink background */
-    color: #d6006c; /* dark pink/red text */
+    color: #4b2e83; /* dim indigo text */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -29,17 +29,17 @@
 
   /* Top balance bar */
   .balance-bar {
-    background: #f4b6d7;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
     border-radius: 15px;
     padding: 10px 15px;
     margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 0 15px #f4b6d7aa;
-    color: #d6006c;
-    font-weight: 700;
-    font-size: 1rem;
+    box-shadow: 0 0 20px #ffd700cc;
+    color: #fff8dc;
+    font-weight: 600;
+    font-size: 1.1rem;
   }
   .balance-left {
     display: flex;
@@ -47,69 +47,169 @@
     gap: 8px;
   }
   .balance-left svg {
-    fill: #d6006c;
+    fill: #ffd700;
     width: 20px;
     height: 20px;
   }
   .balance-amount {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff8dc;
   }
   .withdraw-btn {
-    color: #d6006c;
+    color: #ffd700;
     font-weight: 700;
     cursor: pointer;
     user-select: none;
+    text-shadow: 0 0 6px #ffd700;
   }
   .withdraw-btn:hover {
     text-decoration: underline;
+    color: #fff;
   }
   .balance-right {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     cursor: pointer;
+  }
+  .balance-right button#langSelectorBtn,
+  .balance-right button#globeBtn {
+    background: transparent;
+    color: #ffd700;
+    font-weight: 700;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    padding: 6px 10px;
+    box-shadow: 0 0 10px #ffd700aa;
+  }
+  .balance-right button#langSelectorBtn:hover,
+  .balance-right button#globeBtn:hover {
+    color: #fff;
+    box-shadow: 0 0 20px #ffea00;
+  }
+
+  /* --- Slider Container --- */
+  .slider-container {
+    position: relative;
+    width: 100%;
+    height: 180px; /* taller banner */
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); /* subtle gold glow */
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* universe gradient */
+    user-select: none;
+  }
+
+  .slider-wrapper {
+    display: flex;
+    transition: transform 0.8s ease-in-out;
+    height: 100%;
+  }
+
+  .slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    filter: brightness(0.85) saturate(1.1);
+  }
+
+  /* Slide caption */
+  .slide-caption {
+    position: absolute;
+    bottom: 18px;
+    left: 20px;
+    color: #f0e68c; /* khaki/gold */
+    font-weight: 600;
+    font-size: 1.4rem;
+    text-shadow: 0 0 8px #000a;
+    user-select: none;
+  }
+
+  /* Pagination dots */
+  .slider-pagination {
+    position: absolute;
+    bottom: 7px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    user-select: none;
+  }
+
+  .slider-dot {
+    width: 12px;
+    height: 4px;
+    border-radius: 10px;
+    background: #b8860b; /* dark goldenrod */
+    opacity: 0.4;
+    cursor: pointer;
+    transition: opacity 0.3s ease, width 0.3s ease;
+  }
+
+  .slider-dot.active {
+    opacity: 1;
+    width: 24px;
+    background: linear-gradient(90deg, #00dfff, #ffcc00);
+    box-shadow: 0 0 8px #ffd700;
   }
 
   /* Official Channel banner */
   .official-channel {
-    background: white;
-    border-radius: 15px;
-    margin-bottom: 12px;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    border-radius: 25px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    padding: 15px 20px;
-    box-shadow: 0 2px 15px rgba(214,0,108,0.4);
+    padding: 20px 25px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
   }
   .official-channel img {
-    width: 180px;   /* increased width */
-    height: auto;   /* maintain aspect ratio */
-    border-radius: 12px;
+    width: 200px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 20px;
     flex-shrink: 0;
+    box-shadow: 0 0 20px #ffd700;
   }
   .official-channel-text {
-    margin-left: 20px;
+    margin-left: 25px;
     font-weight: 700;
-    font-size: 1.5rem;
-    color: #d6006c;
+    font-size: 1.7rem;
+    color: #ffd700;
+    text-shadow: 0 0 15px #ffd700aa;
     user-select: none;
+    letter-spacing: 1.5px;
   }
 
   /* Task card base */
   .task-card {
-    background: white;
-    border-radius: 15px;
-    padding: 15px 15px 15px 15px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 8px rgba(214,0,108,0.25);
-    color: #d6006c;
+    background: #fff8f8;
+    border-radius: 20px;
+    padding: 18px 20px 20px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    color: #4b2e83; /* indigo/dark blue */
+    font-weight: 600;
+    font-size: 0.95rem;
   }
   .task-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-weight: 700;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #3a1a6c;
   }
   .task-header .title {
     display: flex;
@@ -123,13 +223,15 @@
   }
   .task-header .amount {
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 1.05rem;
+    color: #b8860b; /* gold */
   }
   .task-subtitle {
-    font-weight: 600;
-    font-size: 0.85rem;
+    font-weight: 500;
+    font-size: 0.8rem;
     margin-top: 3px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    color: #6a4c93;
   }
 
   /* Progress bar container */
@@ -137,26 +239,48 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
+    gap: 8px;
+    margin-bottom: 10px;
   }
   /* Black box with amount */
   .progress-box {
     background: #1a1a1a;
-    color: white;
-    padding: 6px 14px; /* Increased horizontal padding */
-    border-radius: 4px;
+    color: #ffd700;
+    padding: 8px 16px;
+    border-radius: 6px;
     font-weight: 700;
-    font-size: 1rem; /* Increased font size */
-    min-width: 60px; /* Increased min width */
+    font-size: 1.05rem;
+    min-width: 65px;
     text-align: center;
+    box-shadow:
+      0 0 8px #ffd700,
+      inset 0 0 6px #ffec8b;
     user-select: none;
   }
-  /* Connecting line */
+  /* Animated connecting line */
   .progress-line {
     flex-grow: 1;
-    height: 2px;
-    background: #d6006c;
-    margin: 0 2px;
+    height: 4px;
+    border-radius: 12px;
+    margin: 0 4px;
+    background: linear-gradient(270deg,
+      #00dfff,
+      #ff0000,
+      #ffd700,
+      #4b0082,
+      #8a2be2,
+      #00dfff);
+    background-size: 1200% 1200%;
+    animation: moveGradient 6s linear infinite;
+    box-shadow: 0 0 10px #ffd700;
+  }
+  @keyframes moveGradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    100% {
+      background-position: 100% 50%;
+    }
   }
 
   /* Audio icon and text row */
@@ -167,34 +291,35 @@
     gap: 6px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #d6006c;
+    color: #3a1a6c;
     user-select: none;
   }
   .audio-row svg {
-    width: 16px;
-    height: 16px;
-    fill: #d6006c;
+    width: 18px;
+    height: 18px;
+    fill: #4b2e83;
   }
 
   /* Detail button */
   .detail-btn {
     float: right;
     margin-top: 8px;
-    background: #f4b6d7;
+    background: #b8860b;
     border: none;
-    border-radius: 20px;
-    padding: 6px 16px;
-    color: #d6006c;
+    border-radius: 30px;
+    padding: 8px 22px;
+    color: white;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     cursor: pointer;
-    box-shadow: 0 2px 6px #f4b6d7aa;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 0 12px #ffd700;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
     user-select: none;
   }
   .detail-btn:hover {
-    background: #d6006c;
-    color: white;
+    background: #ffcc00;
+    box-shadow: 0 0 20px #ffea00;
+    color: #3a1a6c;
   }
 
   /* Bottom navigation bar */
@@ -202,8 +327,8 @@
     position: fixed;
     bottom: 0; left: 0; right: 0;
     height: 55px;
-    background: white;
-    box-shadow: 0 -1px 10px rgba(214,0,108,0.3);
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    box-shadow: 0 -2px 15px #ffd700cc;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -211,16 +336,16 @@
   }
   nav.bottom-nav a {
     text-decoration: none;
-    color: #d6006c;
+    color: #fff8dc;
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 600;
     display: flex;
     flex-direction: column;
     align-items: center;
     user-select: none;
   }
   nav.bottom-nav a.active {
-    color: #ff1a75;
+    color: #ffea00;
   }
   nav.bottom-nav a svg {
     width: 22px;
@@ -234,13 +359,13 @@
     width: 6px;
   }
   .content::-webkit-scrollbar-thumb {
-    background: #d6006c;
+    background: #b8860b;
     border-radius: 3px;
   }
 
   /* Telegram button - bigger and styled */
   .balance-right button#globeBtn {
-    font-size: 1.9rem; /* increased from 1.3rem */
+    font-size: 1.9rem;
     width: 44px;
     height: 44px;
     line-height: 44px;
@@ -248,17 +373,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #f4b6d7;
-    color: #d6006c;
+    background: transparent;
+    color: #ffd700;
     cursor: pointer;
     user-select: none;
     border: none;
     transition: background-color 0.3s ease;
+    box-shadow: 0 0 12px #ffd700aa;
   }
-
   .balance-right button#globeBtn:hover {
-    background: #d6006c;
-    color: white;
+    color: #fff;
+    box-shadow: 0 0 20px #ffea00;
   }
 
   /* Responsive */
@@ -266,16 +391,19 @@
     .official-channel {
       flex-direction: column;
       align-items: center;
-      padding: 10px 10px;
+      padding: 15px 15px;
     }
     .official-channel img {
-      height: 70px;
-      width: auto;
+      width: 140px;
+      height: 80px;
     }
     .official-channel-text {
       margin-left: 0;
-      margin-top: 8px;
-      font-size: 1.3rem;
+      margin-top: 10px;
+      font-size: 1.4rem;
+    }
+    .slider-container {
+      height: 140px;
     }
   }
 
@@ -401,8 +529,36 @@
     </div>
     <div class="withdraw-btn" role="button" tabindex="0" id="withdrawBtn" aria-label="Withdraw balance">WITHDRAW</div>
     <div class="balance-right">
-      <button id="langSelectorBtn" aria-label="Select Language" title="Select Language" style="background:none;border:none;color:#d6006c;cursor:pointer;font-size:1.3rem;">A</button>
+      <button id="langSelectorBtn" aria-label="Select Language" title="Select Language" style="background:none;border:none;color:#ffd700;cursor:pointer;font-size:1.5rem;">A</button>
       <button id="globeBtn" aria-label="Select Country" title="Select Country">🌍</button>
+    </div>
+  </div>
+
+  <!-- Slider with 4 slides -->
+  <div class="slider-container" aria-label="Top Income banner slider" role="region">
+    <div class="slider-wrapper" id="sliderWrapper">
+      <div class="slide">
+        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Top Income Slide 1" />
+        <div class="slide-caption">Top Income</div>
+      </div>
+      <div class="slide">
+        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Top Income Slide 2" />
+        <div class="slide-caption">Top Income</div>
+      </div>
+      <div class="slide">
+        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Top Income Slide 3" />
+        <div class="slide-caption">Top Income</div>
+      </div>
+      <div class="slide">
+        <img src="https://i.ibb.co/TDKqvZth/IMG-20250820-183820-524.jpg" alt="Top Income Slide 4" />
+        <div class="slide-caption">Top Income</div>
+      </div>
+    </div>
+    <div class="slider-pagination" id="sliderPagination" aria-label="Slider pagination dots">
+      <div class="slider-dot active" data-slide="0" role="button" tabindex="0" aria-label="Go to slide 1"></div>
+      <div class="slider-dot" data-slide="1" role="button" tabindex="0" aria-label="Go to slide 2"></div>
+      <div class="slider-dot" data-slide="2" role="button" tabindex="0" aria-label="Go to slide 3"></div>
+      <div class="slider-dot" data-slide="3" role="button" tabindex="0" aria-label="Go to slide 4"></div>
     </div>
   </div>
 
@@ -434,7 +590,7 @@
       </div>
       <div class="amount" id="standingTaskAmount">₦ 525+</div>
     </div>
-    <div class="task-subtitle" id="standingTaskSub">0 M</div>
+    <div class="task-subtitle" id="standingTaskSub">108 M</div>
 
     <div class="progress-bar" aria-label="Standing Machine Task progress">
       <div class="progress-box">30₦</div>
@@ -518,15 +674,15 @@
     Home
   </a>
   <a href="linking.html" aria-label="Scan Code">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff8dc" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M3 3h4v4H3V3zm14 0h4v4h-4V3zM3 17h4v4H3v-4zm14 0h4v4h-4v-4zM9 7h6v10H9V7z"/></svg>
     Scan Code
   </a>
   <a href="account.html" aria-label="Wallet">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M21 7v10c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7h18zM7 9h10v6H7V9zm14-4H3c-1.1 0-2 .9-2 2v1h22V7c0-1.1-.9-2-2-2z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff8dc" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M21 7v10c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7h18zM7 9h10v6H7V9zm14-4H3c-1.1 0-2 .9-2 2v1h22V7c0-1.1-.9-2-2-2z"/></svg>
     Wallet
   </a>
   <a href="referral.html" aria-label="Profile">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="#d6006c" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff8dc" viewBox="0 0 24 24" width="22px" height="22px" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
     Profile
   </a>
 </nav>
@@ -604,6 +760,48 @@
   document.getElementById('globeBtn').addEventListener('click', () => {
     alert('Country selector clicked.');
   });
+
+  // Slider functionality
+  const sliderWrapper = document.getElementById('sliderWrapper');
+  const sliderDots = document.querySelectorAll('.slider-dot');
+  let currentSlide = 0;
+  const totalSlides = sliderDots.length;
+
+  function goToSlide(index) {
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentSlide = index;
+    sliderWrapper.style.transform = `translateX(-${index * 100}%)`;
+    sliderDots.forEach(dot => dot.classList.remove('active'));
+    sliderDots[index].classList.add('active');
+  }
+
+  // Auto slide every 5 seconds
+  let slideInterval = setInterval(() => {
+    goToSlide(currentSlide + 1);
+  }, 5000);
+
+  // Pagination dots click & keyboard accessible
+  sliderDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      goToSlide(parseInt(dot.dataset.slide));
+      resetInterval();
+    });
+    dot.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        goToSlide(parseInt(dot.dataset.slide));
+        resetInterval();
+      }
+    });
+  });
+
+  function resetInterval() {
+    clearInterval(slideInterval);
+    slideInterval = setInterval(() => {
+      goToSlide(currentSlide + 1);
+    }, 5000);
+  }
 </script>
 
 </body>
