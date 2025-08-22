@@ -315,12 +315,12 @@
       <div class="reward-card" tabindex="0" aria-label="Invite Reward 1500 naira">
         <img src="https://img.icons8.com/color/96/000000/group.png" alt="Invite Reward Icon" />
         <div class="reward-name">Invite Reward</div>
-        <div class="reward-amount">₦1500</div>
+        <div class="reward-amount">₦5000</div>
       </div>
       <div class="reward-card" tabindex="0" aria-label="Stage Reward 1500 naira">
         <img src="https://img.icons8.com/color/96/000000/trophy.png" alt="Stage Reward Icon" />
         <div class="reward-name">Stage Reward</div>
-        <div class="reward-amount">₦1500</div>
+        <div class="reward-amount">₦5000</div>
       </div>
     </div>
   </section>
@@ -406,7 +406,7 @@
   const inviteCode = document.getElementById('inviteCode').textContent.trim();
 
   getLinkBtn.addEventListener('click', () => {
-    const message = `Hello! Join us now and explore. Imagine ₦5000 per referral! We are doing something great, what about you? Be the first to withdraw! \n\nInvite Code: ${inviteCode}\nhttps://akinola566.github.io/Winter-/home.html`;
+    const message = `Hello! Join us now and explore. Imagine ₦5000 per referral! We are doing something great, what about you? Be the first to withdraw! \n\nInvite Code: ${inviteCode}\nhttp://www.winter-earn-com.free.nf/`;
     navigator.clipboard.writeText(message).then(() => {
       alert('Referral message copied to clipboard!');
     }).catch(() => {
