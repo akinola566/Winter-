@@ -57,43 +57,35 @@ def extract_otp_from_text(text):
     return None
 
 def process_and_report_sms(phone_number, sender_cli, message_content, message_time_obj):
-
     if (datetime.utcnow() - message_time_obj).total_seconds() > 300:
-
         return
 
     sms_hash = hashlib.md5(f"{phone_number}-{message_content}".encode('utf-8')).hexdigest()
-
     if sms_hash in reported_sms_hashes:
-
         return
-
     reported_sms_hashes.append(sms_hash)
 
     print(f"[SMS Detected] Number: {phone_number}, Sender: {sender_cli}, Message: {message_content[:70]}...")
 
     otp_code = extract_otp_from_text(message_content)
-
     notification_text = f"For `{phone_number}`\nMessage: `{message_content}`\n"
 
     if otp_code:
-
         notification_text += f"OTP: `{otp_code}`\n"
-
         with otp_cache_lock:
-
             otp_cache[phone_number] = otp_code
 
     notification_text += "---\nMade by me 😎"
 
-# Ensure sms.GROUP_CHAT_ID_FOR_LISTS is defined before using
-try:
-    group_chat_id = sms.GROUP_CHAT_ID_FOR_LISTS
-except AttributeError:
-    group_chat_id = None
+    # Safely get group chat ID from sms module
+    try:
+        group_chat_id = sms.GROUP_CHAT_ID_FOR_LISTS
+    except AttributeError:
+        group_chat_id = None
 
-if send_telegram_message and group_chat_id:
-    send_telegram_message(notification_text, chat_id=group_chat_id)
+    if send_telegram_message and group_chat_id:
+        send_telegram_message(notification_text, chat_id=group_chat_id)
+
 
 
 def get_polling_csrf_token(session):
